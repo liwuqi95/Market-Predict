@@ -4,7 +4,7 @@
 		module="predictor$sources"
 		revision="0.1"
 		status="integration"
-		publication="20171118120745"
+		publication="20171118121253"
 	/>
 	<configurations>
 		<conf name="compile" visibility="public" description=""/>
