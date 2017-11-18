@@ -292,58 +292,22 @@
 [debug] == resolving dependencies default#predictor$sources;0.1->jline#jline;2.14.3 [scala-tool->master]
 [debug] 	resolved ivy file produced in cache
 [debug] :: downloading artifacts ::
-[debug] 		tried /Users/wuqili/.ivy2/local/org.scala-lang.modules/scala-xml_2.11/1.0.5/srcs/scala-xml_2.11-sources.jar
-[debug] 		tried /Users/wuqili/.ivy2/local/org.scala-lang/scala-compiler/2.11.12/srcs/scala-compiler-sources.jar
-[debug] 		tried /Users/wuqili/.ivy2/local/org.scala-lang/scala-library/2.11.12/srcs/scala-library-sources.jar
-[debug] 		tried https://repo1.maven.org/maven2/org/scala-lang/modules/scala-xml_2.11/1.0.5/scala-xml_2.11-1.0.5-sources.jar
-[debug] 		tried https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.11.12/scala-compiler-2.11.12-sources.jar
-[debug] 		tried https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.11.12/scala-library-2.11.12-sources.jar
-[debug] 		tried /Users/wuqili/.ivy2/local/jline/jline/2.14.3/srcs/jline-sources.jar
-[debug] 		tried https://repo1.maven.org/maven2/jline/jline/2.14.3/jline-2.14.3-sources.jar
-[info] downloading https://repo1.maven.org/maven2/org/scala-lang/modules/scala-xml_2.11/1.0.5/scala-xml_2.11-1.0.5-sources.jar ...
-[debug] 	public: downloading https://repo1.maven.org/maven2/org/scala-lang/modules/scala-xml_2.11/1.0.5/scala-xml_2.11-1.0.5-sources.jar
-[info] downloading https://repo1.maven.org/maven2/jline/jline/2.14.3/jline-2.14.3-sources.jar ...
-[debug] 	public: downloading https://repo1.maven.org/maven2/jline/jline/2.14.3/jline-2.14.3-sources.jar
-[info] downloading https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.11.12/scala-library-2.11.12-sources.jar ...
-[debug] 	public: downloading https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.11.12/scala-library-2.11.12-sources.jar
-[info] downloading https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.11.12/scala-compiler-2.11.12-sources.jar ...
-[debug] 	public: downloading https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.11.12/scala-compiler-2.11.12-sources.jar
-[debug] 	public: downloading https://repo1.maven.org/maven2/jline/jline/2.14.3/jline-2.14.3-sources.jar.sha1
-[debug] 	public: downloading https://repo1.maven.org/maven2/org/scala-lang/modules/scala-xml_2.11/1.0.5/scala-xml_2.11-1.0.5-sources.jar.sha1
-[debug] sha1 OK for https://repo1.maven.org/maven2/jline/jline/2.14.3/jline-2.14.3-sources.jar
-[info] 	[SUCCESSFUL ] jline#jline;2.14.3!jline.jar(src) (138ms)
-[debug] 		tried /Users/wuqili/.ivy2/local/org.scala-lang.modules/scala-parser-combinators_2.11/1.0.4/srcs/scala-parser-combinators_2.11-sources.jar
-[debug] 		tried https://repo1.maven.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.11/1.0.4/scala-parser-combinators_2.11-1.0.4-sources.jar
-[debug] 	public: downloading https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.11.12/scala-library-2.11.12-sources.jar.sha1
-[info] downloading https://repo1.maven.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.11/1.0.4/scala-parser-combinators_2.11-1.0.4-sources.jar ...
-[debug] 	public: downloading https://repo1.maven.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.11/1.0.4/scala-parser-combinators_2.11-1.0.4-sources.jar
-[debug] sha1 OK for https://repo1.maven.org/maven2/org/scala-lang/modules/scala-xml_2.11/1.0.5/scala-xml_2.11-1.0.5-sources.jar
-[info] 	[SUCCESSFUL ] org.scala-lang.modules#scala-xml_2.11;1.0.5!scala-xml_2.11.jar(src) (179ms)
-[debug] 	public: downloading https://repo1.maven.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.11/1.0.4/scala-parser-combinators_2.11-1.0.4-sources.jar.sha1
-[debug] sha1 OK for https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.11.12/scala-library-2.11.12-sources.jar
-[info] 	[SUCCESSFUL ] org.scala-lang#scala-library;2.11.12!scala-library.jar(src) (200ms)
-[debug] 		tried /Users/wuqili/.ivy2/local/org.scala-lang/scala-reflect/2.11.12/srcs/scala-reflect-sources.jar
-[debug] 		tried https://repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.11.12/scala-reflect-2.11.12-sources.jar
-[info] downloading https://repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.11.12/scala-reflect-2.11.12-sources.jar ...
-[debug] 	public: downloading https://repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.11.12/scala-reflect-2.11.12-sources.jar
-[debug] sha1 OK for https://repo1.maven.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.11/1.0.4/scala-parser-combinators_2.11-1.0.4-sources.jar
-[info] 	[SUCCESSFUL ] org.scala-lang.modules#scala-parser-combinators_2.11;1.0.4!scala-parser-combinators_2.11.jar(src) (100ms)
-[debug] 	public: downloading https://repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.11.12/scala-reflect-2.11.12-sources.jar.sha1
-[debug] sha1 OK for https://repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.11.12/scala-reflect-2.11.12-sources.jar
-[info] 	[SUCCESSFUL ] org.scala-lang#scala-reflect;2.11.12!scala-reflect.jar(src) (147ms)
-[debug] 	public: downloading https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.11.12/scala-compiler-2.11.12-sources.jar.sha1
-[debug] sha1 OK for https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.11.12/scala-compiler-2.11.12-sources.jar
-[info] 	[SUCCESSFUL ] org.scala-lang#scala-compiler;2.11.12!scala-compiler.jar(src) (414ms)
-[debug] :: resolution report :: resolve 63ms :: artifacts dl 417ms
-[debug] 	report for default#predictor$sources;0.1 compile produced in /Users/wuqili/Desktop/Predictor/target/scala-2.11/resolution-cache/reports/default-predictor$sources-compile.xml
-[debug] 	report for default#predictor$sources;0.1 runtime produced in /Users/wuqili/Desktop/Predictor/target/scala-2.11/resolution-cache/reports/default-predictor$sources-runtime.xml
-[debug] 	report for default#predictor$sources;0.1 test produced in /Users/wuqili/Desktop/Predictor/target/scala-2.11/resolution-cache/reports/default-predictor$sources-test.xml
-[debug] 	report for default#predictor$sources;0.1 provided produced in /Users/wuqili/Desktop/Predictor/target/scala-2.11/resolution-cache/reports/default-predictor$sources-provided.xml
-[debug] 	report for default#predictor$sources;0.1 optional produced in /Users/wuqili/Desktop/Predictor/target/scala-2.11/resolution-cache/reports/default-predictor$sources-optional.xml
-[debug] 	report for default#predictor$sources;0.1 compile-internal produced in /Users/wuqili/Desktop/Predictor/target/scala-2.11/resolution-cache/reports/default-predictor$sources-compile-internal.xml
-[debug] 	report for default#predictor$sources;0.1 runtime-internal produced in /Users/wuqili/Desktop/Predictor/target/scala-2.11/resolution-cache/reports/default-predictor$sources-runtime-internal.xml
-[debug] 	report for default#predictor$sources;0.1 test-internal produced in /Users/wuqili/Desktop/Predictor/target/scala-2.11/resolution-cache/reports/default-predictor$sources-test-internal.xml
-[debug] 	report for default#predictor$sources;0.1 plugin produced in /Users/wuqili/Desktop/Predictor/target/scala-2.11/resolution-cache/reports/default-predictor$sources-plugin.xml
-[debug] 	report for default#predictor$sources;0.1 pom produced in /Users/wuqili/Desktop/Predictor/target/scala-2.11/resolution-cache/reports/default-predictor$sources-pom.xml
-[debug] 	report for default#predictor$sources;0.1 scala-tool produced in /Users/wuqili/Desktop/Predictor/target/scala-2.11/resolution-cache/reports/default-predictor$sources-scala-tool.xml
-[debug] 	resolve done (63ms resolve - 417ms download)
+[debug] 	[NOT REQUIRED] org.scala-lang.modules#scala-parser-combinators_2.11;1.0.4!scala-parser-combinators_2.11.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-lang.modules#scala-xml_2.11;1.0.5!scala-xml_2.11.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-lang#scala-compiler;2.11.12!scala-compiler.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-lang#scala-library;2.11.12!scala-library.jar(src)
+[debug] 	[NOT REQUIRED] org.scala-lang#scala-reflect;2.11.12!scala-reflect.jar(src)
+[debug] 	[NOT REQUIRED] jline#jline;2.14.3!jline.jar(src)
+[debug] :: resolution report :: resolve 38ms :: artifacts dl 3ms
+[debug] 	report for default#predictor$sources;0.1 compile produced in /Users/wuqili/Desktop/Market-Predict/Predictor/target/scala-2.11/resolution-cache/reports/default-predictor$sources-compile.xml
+[debug] 	report for default#predictor$sources;0.1 runtime produced in /Users/wuqili/Desktop/Market-Predict/Predictor/target/scala-2.11/resolution-cache/reports/default-predictor$sources-runtime.xml
+[debug] 	report for default#predictor$sources;0.1 test produced in /Users/wuqili/Desktop/Market-Predict/Predictor/target/scala-2.11/resolution-cache/reports/default-predictor$sources-test.xml
+[debug] 	report for default#predictor$sources;0.1 provided produced in /Users/wuqili/Desktop/Market-Predict/Predictor/target/scala-2.11/resolution-cache/reports/default-predictor$sources-provided.xml
+[debug] 	report for default#predictor$sources;0.1 optional produced in /Users/wuqili/Desktop/Market-Predict/Predictor/target/scala-2.11/resolution-cache/reports/default-predictor$sources-optional.xml
+[debug] 	report for default#predictor$sources;0.1 compile-internal produced in /Users/wuqili/Desktop/Market-Predict/Predictor/target/scala-2.11/resolution-cache/reports/default-predictor$sources-compile-internal.xml
+[debug] 	report for default#predictor$sources;0.1 runtime-internal produced in /Users/wuqili/Desktop/Market-Predict/Predictor/target/scala-2.11/resolution-cache/reports/default-predictor$sources-runtime-internal.xml
+[debug] 	report for default#predictor$sources;0.1 test-internal produced in /Users/wuqili/Desktop/Market-Predict/Predictor/target/scala-2.11/resolution-cache/reports/default-predictor$sources-test-internal.xml
+[debug] 	report for default#predictor$sources;0.1 plugin produced in /Users/wuqili/Desktop/Market-Predict/Predictor/target/scala-2.11/resolution-cache/reports/default-predictor$sources-plugin.xml
+[debug] 	report for default#predictor$sources;0.1 pom produced in /Users/wuqili/Desktop/Market-Predict/Predictor/target/scala-2.11/resolution-cache/reports/default-predictor$sources-pom.xml
+[debug] 	report for default#predictor$sources;0.1 scala-tool produced in /Users/wuqili/Desktop/Market-Predict/Predictor/target/scala-2.11/resolution-cache/reports/default-predictor$sources-scala-tool.xml
+[debug] 	resolve done (38ms resolve - 3ms download)
