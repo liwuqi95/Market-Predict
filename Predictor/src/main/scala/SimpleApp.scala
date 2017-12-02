@@ -9,6 +9,8 @@ import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions._
 
 object SimpleApp {
+
+
   def main(args: Array[String]) {
 
 
@@ -35,16 +37,14 @@ object SimpleApp {
       .withColumn("date", $"data" (0))
       .withColumn("open", $"data" (1))
       .withColumn("close", $"data" (2))
-        .drop("data")
+      .drop("data")
 
 
 
-
-    goldDF.printSchema()
-    goldDF.show(false)
-
+      goldDF.show(false)
 
 
     spark.stop()
   }
 }
+
