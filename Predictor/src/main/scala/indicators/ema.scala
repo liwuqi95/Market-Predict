@@ -7,10 +7,12 @@ class ema(val dayParam: Int) {
   var priceData : List[Float] = List()
 
 
-  def addData(data: Float):Unit ={
+  def addData(data: Float):Float ={
     priceData = priceData :+ data
     if (priceData.length > dayNum)
-      priceData = priceData.dropRight(dayNum)
+      priceData = priceData.drop(1)
+
+    getEma()
   }
 
   def getEma(): Float ={
