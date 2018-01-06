@@ -1,18 +1,10 @@
 /* SimpleApp.scala */
 
-import org.apache.spark.SparkConf
-
-import org.apache.spark.SparkContext
-
-import org.apache.spark.sql.SparkSession
-
+import indicators.ema
 import org.apache.spark.sql.functions._
-
-import indicators._
-
-import org.apache.spark.sql.Row
-
 import org.apache.spark.sql.types._
+import org.apache.spark.sql.{Row, SparkSession}
+import org.apache.spark.{SparkConf, SparkContext}
 
 object SimpleApp {
 
