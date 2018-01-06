@@ -44,7 +44,7 @@ object SimpleApp {
     for (iteration <- goldDF.collect()){
       print(iteration)
       print("5-day ema is " + fiveDay.addData(iteration.getString(2).toFloat) + "   ")
-      println("21-day ema is " + twentyoneDay.addData(iteration.getString(2).toFloat))
+      println("021-day ema is " + twentyoneDay.addData(iteration.getString(2).toFloat))
     }
 
 
