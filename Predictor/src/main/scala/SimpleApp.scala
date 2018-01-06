@@ -1,6 +1,6 @@
 /* SimpleApp.scala */
 
-import indicators.ema
+import indicators._
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.{Row, SparkSession}
@@ -36,15 +36,13 @@ object SimpleApp {
 
     goldDF.show
 
+    val testmacd = new macd(10, 100)
 
-    val fiveDay = new ema(5)
-    val twentyoneDay = new ema(21)
-
-
-    for (iteration <- goldDF.collect()){
-      print(iteration)
-      print("5-day ema is " + fiveDay.addData(iteration.getString(2).toFloat) + "   ")
-      println("021-day ema is " + twentyoneDay.addData(iteration.getString(2).toFloat))
+    for (iteration <- goldDF.orderBy(asc("date")).collect()){
+      print(iteration + "    ")
+      var isUp:Boolean = false
+      if (iteration.getString(2) != null)
+        isUp = testmacd.compuateMACDResult(iteration.getString(2).toFloat)
     }
 
 
