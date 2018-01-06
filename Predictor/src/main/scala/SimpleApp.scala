@@ -33,9 +33,6 @@ object SimpleApp {
     val goldJson = spark.read.json("gold.json")
 
 
-    goldJson.printSchema()
-
-
 
     val goldData = goldJson.select($"dataset.data")
 
