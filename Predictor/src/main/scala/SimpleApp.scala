@@ -1,12 +1,10 @@
 /* SimpleApp.scala */
 
-import indicators.ema
+import indicators._
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.{Row, SparkSession}
 import org.apache.spark.{SparkConf, SparkContext}
-import org.apache.spark.ml.linalg.{Vector, Vectors}
-import org.apache.spark.ml.classification.LogisticRegression
 
 object SimpleApp {
 
@@ -18,13 +16,11 @@ object SimpleApp {
     val conf = new SparkConf().setAppName("Simple Application").setMaster("local[4]")
     val sc = new SparkContext(conf)
     sc.setLogLevel("ERROR")
-
     val spark = SparkSession.builder.appName("Simple Application").getOrCreate()
+ 
 
 
     import spark.implicits._
-
-
 
 
     // Open Gold Json file and load data
@@ -40,33 +36,49 @@ object SimpleApp {
       .withColumn("close", $"data" (2))
       .drop("data")
 
-
-
-    val training = spark.createDataFrame(Seq(
-      (1.0, Vectors.dense(0.0, 1.1, 0.1)),
-      (0.0, Vectors.dense(2.0, 1.0, -1.0)),
-      (0.0, Vectors.dense(2.0, 1.3, 1.0)),
-      (1.0, Vectors.dense(0.0, 1.2, -0.5))
-    )).toDF("label", "features")
-
-
-    training.show
-
-
-    val lr = new LogisticRegression()
-    // Print out the parameters, documentation, and any default values.
-    //println("LogisticRegression parameters:\n" + lr.explainParams() + "\n")
-
-    lr.setMaxIter(10)
-      .setRegParam(0.01)
+    goldDF.show
 
 
 
-    val model1 = lr.fit(training)
+
+
+    /** MACD **/
+    val macd_predictor = new macd(10, 100)
+    for (iteration <- goldDF.orderBy(asc("date")).collect()){
+      //print(iteration + "    ")
+      var isUp:Boolean = false
+      if (iteration.getString(2) != null)
+        isUp = macd_predictor.compuateMACDResult(iteration.getString(2).toFloat)
+    }
 
 
 
-    println("Model 1 was fit using parameters: " + model1.parent.extractParamMap)
+    /** RSI **/
+    val rsi_predictor = new rsi(14)
+
+    for (iteration <- goldDF.collect()){
+      //print(iteration + "    ")
+      var isUp:Float = 50
+      // this value is only being considered when it is bigger than 70/80 and lower than 30/20
+      // in between, we'll not consider
+      if (iteration.getString(2) != null)
+        isUp = rsi_predictor.compuateRSIResult(iteration.getString(2).toFloat)
+    }
+
+
+
+
+
+    def transformRow(row: Row): Row =  Row.fromSeq(row.toSeq ++ Array[Any](-1, 1))
+
+    def transformRows(iter: Iterator[Row]): Iterator[Row] = iter.map(transformRow)
+
+
+    val newSchema = StructType(goldDF.schema.fields ++ Array(
+      StructField("z", IntegerType, false), StructField("v", IntegerType, false)))
+
+    spark.createDataFrame(goldDF.rdd.mapPartitions(transformRows), newSchema).show
+
 
     spark.stop()
   }
