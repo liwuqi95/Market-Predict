@@ -36,31 +36,37 @@ object SimpleApp {
 
     goldDF.show
 
-
-
-
+    /** SMA **/
+    val sma_predictor = new sma(5)
 
     /** MACD **/
     val macd_predictor = new macd(10, 100)
-    for (iteration <- goldDF.orderBy(asc("date")).collect()){
-      //print(iteration + "    ")
-      var isUp:Boolean = false
-      if (iteration.getString(2) != null)
-        isUp = macd_predictor.compuateMACDResult(iteration.getString(2).toFloat)
-    }
-
-
 
     /** RSI **/
     val rsi_predictor = new rsi(14)
 
-    for (iteration <- goldDF.collect()){
+    for (iteration <- goldDF.orderBy(asc("date")).collect()){
+      /** SMA **/
+      var isSMAUp:Boolean = false
+      if (iteration.getString(2) != null)
+        isSMAUp = sma_predictor.compuateSMAResult(iteration.getString(2).toFloat)
+
+      /** MACD **/
       //print(iteration + "    ")
-      var isUp:Float = 50
+      var isMACDUp:Boolean = false
+      if (iteration.getString(2) != null)
+        isMACDUp = macd_predictor.compuateMACDResult(iteration.getString(2).toFloat)
+
+
+      /** RSI **/
+      var RSIValue:Float = 50
       // this value is only being considered when it is bigger than 70/80 and lower than 30/20
       // in between, we'll not consider
       if (iteration.getString(2) != null)
-        isUp = rsi_predictor.compuateRSIResult(iteration.getString(2).toFloat)
+        RSIValue = rsi_predictor.compuateRSIResult(iteration.getString(2).toFloat)
+
+
+      println("SMA " + isSMAUp + "   MACD   " + isMACDUp + "  RSI  " + RSIValue)
     }
 
 
