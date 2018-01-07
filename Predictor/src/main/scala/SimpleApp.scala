@@ -64,6 +64,9 @@ object SimpleApp {
     var cci_counter: Float = 0
     var total_counter: Float = 0
 
+    /** AROON **/
+    val aroon_indicator = new aroon(25)
+
     for (iteration <- goldDF.orderBy(asc("date")).collect()){
       print(iteration + "    ")
 
@@ -86,7 +89,7 @@ object SimpleApp {
       /** RSI **/
       var RSIValue:Float = 50
       // this value is only being considered when it is bigger than 70/80 and lower than 30/20
-      // in between, we'll not consider
+      // in between, we'll not consider, consider indecision
       if (iteration.getString(2) != null)
         RSIValue = rsi_indicator.computeRSIResult(iteration.getString(2).toFloat)
 
@@ -98,7 +101,10 @@ object SimpleApp {
 
       /** CCI **/
       var CCIValue: Float = 0
-      // this value is considered overbought when above 80, oversold when below 20
+      // surges above 100 means a start of uptrend
+      // plunges below -100 means a start of downtrend
+      // 0-100 favors bull
+      // -100-0 favors bear
       if (iteration.getString(2) != null)
         CCIValue = cci_indicator.computeCCIResult(iteration.getString(2).toFloat)
 
@@ -106,9 +112,17 @@ object SimpleApp {
       if (CCIValue >= -100 && CCIValue <= 100)
         cci_counter += 1
 
+      /** AROON **/
+      var AROONValue: (Float, Float) = (50, 50)
+      // up(0) >= 70 && down(1) <= 30, bull
+      // up(0) <= 30 &7 down(1) >= 70, bear
+      if (iteration.getString(2) != null)
+        AROONValue = aroon_indicator.computeAROONResult(iteration.getString(2).toFloat)
+
+
 
       println("SMA: " + isSMAUp + "   EMA: " + isEMAUp + "   MACD: " + isMACDUp + "   RSI: " + RSIValue + "   STOCH: " + STOCHValue
-        + "   CCI: " + CCIValue)
+        + "   CCI: " + CCIValue + "   AROON: " + AROONValue)
     }
 
     //println(cci_counter/total_counter)
