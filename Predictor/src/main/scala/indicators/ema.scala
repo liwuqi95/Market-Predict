@@ -24,7 +24,7 @@ class ema(val dayParam: Int) {
     }
   }
 
-  def compuateEMAResult(data: Float): Boolean ={
+  def computeEMAResult(data: Float): Boolean ={
     addData(data)
     val simpleAverage = getSumAverage()
     val multiplier = 2/(dayNum+1)

@@ -30,7 +30,7 @@ class stoch(val dayParam: Int) {
     max
   }
 
-  def compuateSTOCHResult(data: Float): Float = {
+  def computeSTOCHResult(data: Float): Float = {
     addData(data)
     var high: Float = getHigh()
     var low: Float = getLow()

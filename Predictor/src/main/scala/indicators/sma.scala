@@ -25,7 +25,7 @@ class sma(val dayParam: Int) {
     }
   }
 
-  def compuateSMAResult(data: Float): Boolean ={
+  def computeSMAResult(data: Float): Boolean ={
     val average = addData(data)
 
     if (averageBigger && data > average){

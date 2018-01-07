@@ -11,7 +11,7 @@ class rsi(val dayParam: Int) {
       priceData = priceData.drop(1)
   }
 
-  def compuateRSIResult(data: Float):Float ={
+  def computeRSIResult(data: Float):Float ={
     addData(data)
 
     if (priceData.length == dayNum+1){
