@@ -52,6 +52,9 @@ object SimpleApp {
     /** RSI **/
     val rsi_predictor = new rsi(14)
 
+    /** STOCH **/
+    val stoch_predictor = new stoch(14)
+
     for (iteration <- goldDF.orderBy(asc("date")).collect()){
       print(iteration + "    ")
 
@@ -78,8 +81,13 @@ object SimpleApp {
       if (iteration.getString(2) != null)
         RSIValue = rsi_predictor.compuateRSIResult(iteration.getString(2).toFloat)
 
+      /** STOCH **/
+      var STOCHValue: Float = 50
+      if (iteration.getString(2) != null)
+        STOCHValue = stoch_predictor.compuateSTOCHResult(iteration.getString(2).toFloat)
 
-      println("SMA: " + isSMAUp + "   EMA: " + isEMAUp + "   MACD: " + isMACDUp + "   RSI: " + RSIValue)
+
+      println("SMA: " + isSMAUp + "   EMA: " + isEMAUp + "   MACD: " + isMACDUp + "   RSI: " + RSIValue + "   STOCH: " + STOCHValue)
     }
 
 
