@@ -14,8 +14,10 @@ object SimpleApp {
 
     // Set up Spark running environment
     val conf = new SparkConf().setAppName("Simple Application").setMaster("local[4]")
-    new SparkContext(conf)
+    val sc = new SparkContext(conf)
+    sc.setLogLevel("ERROR")
     val spark = SparkSession.builder.appName("Simple Application").getOrCreate()
+ 
 
 
     import spark.implicits._
