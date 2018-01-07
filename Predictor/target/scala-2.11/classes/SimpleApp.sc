@@ -16,15 +16,11 @@ object SimpleApp {
 
     // Set up Spark running environment
     val conf = new SparkConf().setAppName("Simple Application").setMaster("local[4]")
-    val sc = new SparkContext(conf)
-    sc.setLogLevel("ERROR")
-
+    new SparkContext(conf)
     val spark = SparkSession.builder.appName("Simple Application").getOrCreate()
 
 
     import spark.implicits._
-
-
 
 
     // Open Gold Json file and load data
