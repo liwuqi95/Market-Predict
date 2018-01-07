@@ -1,6 +1,34 @@
 package indicators
 
-import indicators.ema
+class ema(val dayParam: Int) {
+
+  var dayNum: Int = dayParam
+
+  var priceData : List[Float] = List()
+
+
+  def addData(data: Float):Float ={
+    priceData = priceData :+ data
+    if (priceData.length > dayNum)
+      priceData = priceData.drop(1)
+
+    getEma()
+  }
+
+  def getEma(): Float ={
+    if(priceData.length == dayNum) {
+      priceData.sum/dayNum
+    }else{
+      0
+    }
+  }
+
+  def print(): Unit ={
+    println("EMA data is " + priceData)
+  }
+
+
+}
 
 class macd(val dayParam1: Int, val dayParam2: Int) {
   var firstEma:ema = new ema(dayParam1)
@@ -35,12 +63,12 @@ class macd(val dayParam1: Int, val dayParam2: Int) {
       }
     }
 
-    if (previousResult)
-      print("go up    ")
-    else
-      print("go down   ")
-    print(dayParam1 + "-day ema is " + firstData + "   ")
-    println(dayParam2 + "-day ema is " + secondData)
+//    if (previousResult)
+//      print("go up    ")
+//    else
+//      print("go down   ")
+//    print(dayParam1 + "-day ema is " + firstData + "   ")
+//    println(dayParam2 + "-day ema is " + secondData)
 
 
     previousResult

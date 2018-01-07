@@ -36,14 +36,34 @@ object SimpleApp {
 
     goldDF.show
 
-    val testmacd = new macd(10, 100)
 
+
+
+
+    /** MACD **/
+    val macd_predictor = new macd(10, 100)
     for (iteration <- goldDF.orderBy(asc("date")).collect()){
-      print(iteration + "    ")
+      //print(iteration + "    ")
       var isUp:Boolean = false
       if (iteration.getString(2) != null)
-        isUp = testmacd.compuateMACDResult(iteration.getString(2).toFloat)
+        isUp = macd_predictor.compuateMACDResult(iteration.getString(2).toFloat)
     }
+
+
+
+    /** RSI **/
+    val rsi_predictor = new rsi(14)
+
+    for (iteration <- goldDF.collect()){
+      //print(iteration + "    ")
+      var isUp:Float = 50
+      // this value is only being considered when it is bigger than 70/80 and lower than 30/20
+      // in between, we'll not consider
+      if (iteration.getString(2) != null)
+        isUp = rsi_predictor.compuateRSIResult(iteration.getString(2).toFloat)
+    }
+
+
 
 
 
