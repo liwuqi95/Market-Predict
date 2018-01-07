@@ -51,37 +51,31 @@ class indicator(val dataframe: DataFrame) {
 
       /** SMA **/
       var isSMAUp:Boolean = false
-      if (iteration.getString(2) != null)
-        isSMAUp = sma_indicator.computeSMAResult(iteration.getString(2).toFloat)
+      isSMAUp = sma_indicator.computeSMAResult(iteration.getString(1).toFloat)
 
       /** EMA **/
       var isEMAUp:Boolean = false
-      if (iteration.getString(2) != null)
-        isEMAUp = ema_indicator.computeEMAResult(iteration.getString(2).toFloat)
+      isEMAUp = ema_indicator.computeEMAResult(iteration.getString(1).toFloat)
 
       /** MACD **/
       var isMACDUp:Boolean = false
-      if (iteration.getString(2) != null)
-        isMACDUp = macd_indicator.computeMACDResult(iteration.getString(2).toFloat)
+      isMACDUp = macd_indicator.computeMACDResult(iteration.getString(1).toFloat)
 
       /** RSI **/
       var RSIValue:Float = 50
       // this value is only being considered when it is bigger than 70/80 and lower than 30/20
       // in between, we'll not consider
-      if (iteration.getString(2) != null)
-        RSIValue = rsi_indicator.computeRSIResult(iteration.getString(2).toFloat)
+      RSIValue = rsi_indicator.computeRSIResult(iteration.getString(1).toFloat)
 
       /** STOCH **/
       var STOCHValue: Float = 50
       // this value is considered overbought when above 80, oversold when below 20
-      if (iteration.getString(2) != null)
-        STOCHValue = stoch_indicator.computeSTOCHResult(iteration.getString(2).toFloat)
+      STOCHValue = stoch_indicator.computeSTOCHResult(iteration.getString(1).toFloat)
 
       /** CCI **/
       var CCIValue: Float = 0
       // this value is considered overbought when above 80, oversold when below 20
-      if (iteration.getString(2) != null)
-        CCIValue = cci_indicator.computeCCIResult(iteration.getString(2).toFloat)
+      CCIValue = cci_indicator.computeCCIResult(iteration.getString(1).toFloat)
 
       total_counter += 1
       if (CCIValue >= -100 && CCIValue <= 100)
@@ -91,8 +85,7 @@ class indicator(val dataframe: DataFrame) {
       var AROONValue: (Float, Float) = (50, 50)
       // up(0) >= 70 && down(1) <= 30, bull
       // up(0) <= 30 &7 down(1) >= 70, bear
-      if (iteration.getString(2) != null)
-        AROONValue = aroon_indicator.computeAROONResult(iteration.getString(2).toFloat)
+      AROONValue = aroon_indicator.computeAROONResult(iteration.getString(1).toFloat)
 
 
       println("SMA: " + isSMAUp + "   EMA: " + isEMAUp + "   MACD: " + isMACDUp + "   RSI: " + RSIValue + "   STOCH: " + STOCHValue

@@ -31,7 +31,7 @@ object SimpleApp {
 
     val goldDF = goldData.withColumn("data", explode($"data"))
       .withColumn("date", $"data" (0))
-      .withColumn("price", $"data" (2))
+      .withColumn("price", $"data" (1))
       .drop("data")
 
 
