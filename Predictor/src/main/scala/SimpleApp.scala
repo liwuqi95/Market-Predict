@@ -39,26 +39,37 @@ object SimpleApp {
     goldDF.show
 
     /** SMA **/
-    val sma_predictor = new sma(5)
+    //https://www.investopedia.com/articles/technical/052201.asp
+    val sma_predictor = new sma(50)
+
+    /** EMA **/
+    //https://www.investopedia.com/terms/e/ema.asp
+    val ema_predictor = new ema(12)
 
     /** MACD **/
-    val macd_predictor = new macd(10, 100)
+    val macd_predictor = new macd(5, 14)
 
     /** RSI **/
     val rsi_predictor = new rsi(14)
 
     for (iteration <- goldDF.orderBy(asc("date")).collect()){
+      print(iteration + "    ")
+
+
       /** SMA **/
       var isSMAUp:Boolean = false
       if (iteration.getString(2) != null)
         isSMAUp = sma_predictor.compuateSMAResult(iteration.getString(2).toFloat)
 
+      /** EMA **/
+      var isEMAUp:Boolean = false
+      if (iteration.getString(2) != null)
+        isEMAUp = ema_predictor.compuateEMAResult(iteration.getString(2).toFloat)
+
       /** MACD **/
-      //print(iteration + "    ")
       var isMACDUp:Boolean = false
       if (iteration.getString(2) != null)
         isMACDUp = macd_predictor.compuateMACDResult(iteration.getString(2).toFloat)
-
 
       /** RSI **/
       var RSIValue:Float = 50
@@ -68,7 +79,7 @@ object SimpleApp {
         RSIValue = rsi_predictor.compuateRSIResult(iteration.getString(2).toFloat)
 
 
-      println("SMA " + isSMAUp + "   MACD   " + isMACDUp + "  RSI  " + RSIValue)
+      println("SMA: " + isSMAUp + "   EMA: " + isEMAUp + "   MACD: " + isMACDUp + "   RSI: " + RSIValue)
     }
 
 
