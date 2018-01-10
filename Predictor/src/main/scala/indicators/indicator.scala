@@ -100,6 +100,24 @@ class indicator(val dataframe: DataFrame) {
 
     import spark.implicits._
 
+
+    val UDF_sma = udf(sma_indicator.computeSMAResult)
+
+    val UDF_ema = udf(sma_indicator.computeEMAResult)
+
+
+     DF.withColumn("sma", UDF_sma($"Close")).show
+
+
+
+
+
+
+
+
+
+
+
     var cci_counter: Float = 0
     var total_counter: Float = 0
 
@@ -158,8 +176,8 @@ class indicator(val dataframe: DataFrame) {
 
 
 
-      println("SMA: " + isSMAUp + "   EMA: " + isEMAUp + "   MACD: " + isMACDUp + "   RSI: " + RSIValue + "   STOCH: " + STOCHValue
-        + "   STOCHRSI: " + STOCHRSIValue + "   CCI: " + CCIValue + "   AROON: " + AROONValue)
+     // println("SMA: " + isSMAUp + "   EMA: " + isEMAUp + "   MACD: " + isMACDUp + "   RSI: " + RSIValue + "   STOCH: " + STOCHValue
+      //  + "   STOCHRSI: " + STOCHRSIValue + "   CCI: " + CCIValue + "   AROON: " + AROONValue)
 
 
     }
