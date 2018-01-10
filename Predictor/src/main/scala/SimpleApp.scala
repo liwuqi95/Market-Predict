@@ -39,7 +39,7 @@ object SimpleApp {
       .load("XAUUSD_Candlestick_1_D_BID_01.01.2017-31.12.2017.csv")
       df.show
 
-    val gold_indicators = new indicator(goldDF)
+    val gold_indicators = new indicator(df)
 
     gold_indicators.compute
 
