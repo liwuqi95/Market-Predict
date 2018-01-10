@@ -126,8 +126,22 @@ class indicator(val dataframe: DataFrame) {
        .withColumn("MACD", UDF_macd($"Close"))
        .withColumn("RSI", UDF_rsi($"Close"))
        .withColumn("STOCH", UDF_stoch($"Close"))
+       .withColumn("STOCH_RSI", UDF_stoch($"RSI"))
        .withColumn("CCI", UDF_cci($"Close"))
-       .withColumn("AROON", UDF_aroon($"Close")).show
+       .withColumn("AROON", UDF_aroon($"Close"))
+       .filter($"SMA" =!= 3)
+       .filter($"EMA" =!= 3)
+       .filter($"MACD" =!= 3)
+       .filter($"RSI" =!= 3)
+       .filter($"STOCH" =!= 3)
+       .filter($"STOCH_RSI" =!= 3)
+       .filter($"CCI" =!= 3)
+       .filter($"AROON" =!= 3)
+       .drop("High")
+       .drop("Open")
+       .drop("Low")
+       .drop("Volume")
+       .show(100)
 
 
 
