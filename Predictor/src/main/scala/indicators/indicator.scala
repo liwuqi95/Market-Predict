@@ -2,6 +2,10 @@ package indicators
 
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.functions.asc
+import org.apache.spark.sql.types.DoubleType
+import org.apache.spark.sql.functions.udf
+import org.apache.spark.sql.Column
+
 
 object DataTypes extends Enumeration {
   val openPrice = 1
@@ -52,17 +56,35 @@ class indicator(val dataframe: DataFrame) {
   //https://www.investopedia.com/articles/trading/06/aroon.asp
   val aroon_indicator = new aroon(25)
 
+
+
+
+
   def compute: Unit = {
 
     val spark = SparkSession.builder().appName("Indicator").getOrCreate()
 
     import spark.implicits._
+    
+    val tttUDF = udf(sma_indicator.computeSMAResult)
+
+    DF.withColumn("ttt", tttUDF($"Close")).show
+
+
+
+
+
+
+
 
     var cci_counter: Float = 0
     var total_counter: Float = 0
 
+
+
+
     for (iteration <- DF.orderBy(asc("Local time")).filter($"Close" =!= "null" ).collect()){
-      print(iteration + "    ")
+     // print(iteration + "    ")
 
       /** SMA **/
       var isSMAUp:Int = ResultTypes.neutral
@@ -104,11 +126,11 @@ class indicator(val dataframe: DataFrame) {
       // if down cross above up, bear
       AROONValue = aroon_indicator.computeAROONResult(iteration.getString(DataTypes.closePrice).toFloat)
 
+      iteration
+    //  println("SMA: " + isSMAUp + "   EMA: " + isEMAUp + "   MACD: " + isMACDUp + "   RSI: " + RSIValue + "   STOCH: " + STOCHValue
+   //     + "   CCI: " + CCIValue + "   AROON: " + AROONValue)
 
-      println("SMA: " + isSMAUp + "   EMA: " + isEMAUp + "   MACD: " + isMACDUp + "   RSI: " + RSIValue + "   STOCH: " + STOCHValue
-        + "   CCI: " + CCIValue + "   AROON: " + AROONValue)
-
-
+    //println(iteration)
     }
   }
 }
