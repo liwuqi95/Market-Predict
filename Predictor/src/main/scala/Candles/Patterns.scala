@@ -1,5 +1,0 @@
-package Candles
-
-class Patterns {
-
-}
