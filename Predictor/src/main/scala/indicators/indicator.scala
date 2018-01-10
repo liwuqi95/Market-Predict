@@ -4,7 +4,18 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.functions.asc
 
 object DataTypes extends Enumeration {
-  val closedPrice = 1
+  val openPrice = 1
+  val highPrice = 2
+  val lowPrice = 3
+  val closePrice = 4
+}
+
+object ResultTypes extends Enumeration{
+  val strongSell = -2
+  val sell = -1
+  val neutral = 0
+  val buy = 1
+  val strongBuy = 2
 }
 
 
@@ -50,48 +61,48 @@ class indicator(val dataframe: DataFrame) {
     var cci_counter: Float = 0
     var total_counter: Float = 0
 
-    for (iteration <- DF.orderBy(asc("date")).filter($"price" =!= "null" ).collect()){
+    for (iteration <- DF.orderBy(asc("Local time")).filter($"Close" =!= "null" ).collect()){
       print(iteration + "    ")
 
       /** SMA **/
-      var isSMAUp:Boolean = false
-      isSMAUp = sma_indicator.computeSMAResult(iteration.getString(DataTypes.closedPrice).toFloat)
+      var isSMAUp:Int = ResultTypes.neutral
+      isSMAUp = sma_indicator.computeSMAResult(iteration.getString(DataTypes.closePrice).toFloat)
 
       /** EMA **/
-      var isEMAUp:Boolean = false
-      isEMAUp = ema_indicator.computeEMAResult(iteration.getString(DataTypes.closedPrice).toFloat)
+      var isEMAUp:Int = ResultTypes.neutral
+      isEMAUp = ema_indicator.computeEMAResult(iteration.getString(DataTypes.closePrice).toFloat)
 
       /** MACD **/
-      var isMACDUp:Boolean = false
-      isMACDUp = macd_indicator.computeMACDResult(iteration.getString(DataTypes.closedPrice).toFloat)
+      var isMACDUp:Int = ResultTypes.neutral
+      isMACDUp = macd_indicator.computeMACDResult(iteration.getString(DataTypes.closePrice).toFloat)
 
       /** RSI **/
-      var RSIValue:Float = 50
+      var RSIValue:Int = ResultTypes.neutral
       // this value is only being considered when it is bigger than 70/80 and lower than 30/20
       // in between, we'll not consider
-      RSIValue = rsi_indicator.computeRSIResult(iteration.getString(DataTypes.closedPrice).toFloat)
+      RSIValue = rsi_indicator.computeRSIResult(iteration.getString(DataTypes.closePrice).toFloat)
 
       /** STOCH **/
-      var STOCHValue: Float = 50
+      var STOCHValue: Int = ResultTypes.neutral
       // this value is considered overbought when above 80, oversold when below 20
-      STOCHValue = stoch_indicator.computeSTOCHResult(iteration.getString(DataTypes.closedPrice).toFloat)
+      STOCHValue = stoch_indicator.computeSTOCHResult(iteration.getString(DataTypes.closePrice).toFloat)
 
       /** CCI **/
-      var CCIValue: Float = 0
+      var CCIValue: Int = ResultTypes.neutral
       // this value is considered overbought when above 80, oversold when below 20
-      CCIValue = cci_indicator.computeCCIResult(iteration.getString(DataTypes.closedPrice).toFloat)
+      CCIValue = cci_indicator.computeCCIResult(iteration.getString(DataTypes.closePrice).toFloat)
 
       total_counter += 1
       if (CCIValue >= -100 && CCIValue <= 100)
         cci_counter += 1
 
       /** AROON **/
-      var AROONValue: (Float, Float) = (50, 50)
+      var AROONValue: Int = ResultTypes.neutral
       // up(0) >= 70 && down(1) <= 30, bull
       // up(0) <= 30 &7 down(1) >= 70, bear
       // when 30-70, if up cross above down, bull
       // if down cross above up, bear
-      AROONValue = aroon_indicator.computeAROONResult(iteration.getString(DataTypes.closedPrice).toFloat)
+      AROONValue = aroon_indicator.computeAROONResult(iteration.getString(DataTypes.closePrice).toFloat)
 
 
       println("SMA: " + isSMAUp + "   EMA: " + isEMAUp + "   MACD: " + isMACDUp + "   RSI: " + RSIValue + "   STOCH: " + STOCHValue

@@ -24,7 +24,7 @@ class ema(val dayParam: Int) {
     }
   }
 
-  def computeEMAResult(data: Float): Boolean ={
+  def computeEMAResult(data: Float): Int ={
     addData(data)
     val simpleAverage = getSumAverage()
     val multiplier = 2/(dayNum+1)
@@ -39,6 +39,9 @@ class ema(val dayParam: Int) {
       averageBigger = true
     }
 
-    previousResult
+    if (previousResult)
+      ResultTypes.buy
+    else
+      ResultTypes.sell
   }
 }

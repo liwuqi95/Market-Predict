@@ -7,7 +7,7 @@ class macd(val dayParam1: Int, val dayParam2: Int) {
   var trendFirstBigger:Boolean = false
   var previousResult:Boolean = false
 
-  def computeMACDResult(data: Float): Boolean ={
+  def computeMACDResult(data: Float): Int ={
     val firstData = firstSma.addData(data)
     val secondData = secondSma.addData(data)
 
@@ -41,7 +41,10 @@ class macd(val dayParam1: Int, val dayParam2: Int) {
 //    println(dayParam2 + "-day sma is " + secondData)
 
 
-    previousResult
+    if (previousResult)
+      ResultTypes.buy
+    else
+      ResultTypes.sell
   }
 }
 

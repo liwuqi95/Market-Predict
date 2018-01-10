@@ -30,7 +30,7 @@ class stoch(val dayParam: Int) {
     max
   }
 
-  def computeSTOCHResult(data: Float): Float = {
+  def computeSTOCHResult(data: Float): Int = {
     addData(data)
     var high: Float = getHigh()
     var low: Float = getLow()
@@ -42,10 +42,14 @@ class stoch(val dayParam: Int) {
       }
       val PerD: Float = perKData.sum/perKData.length
 
-      PerD
+      if (PerD >= 80)
+        ResultTypes.sell
+      else if (PerD <= 20)
+        ResultTypes.buy
+      else
+        ResultTypes.neutral
     }
     else
-      50
-
+      ResultTypes.neutral
   }
 }

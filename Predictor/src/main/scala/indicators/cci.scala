@@ -41,7 +41,7 @@ class cci(val dayParam: Int) {
     sum/typicalPriceData.length
   }
 
-  def computeCCIResult(data: Float): Float ={
+  def computeCCIResult(data: Float): Int ={
     normalPriceData = addData(data, normalPriceData)
     val normalHigh: Float = getHigh(normalPriceData)
     val normalLow: Float = getLow(normalPriceData)
@@ -52,9 +52,19 @@ class cci(val dayParam: Int) {
       val smaValue: Float = typicalPriceData.sum/typicalPriceData.length
       val meanDerivation: Float = getMeanDerivation()
       val cciValue = (typicalPrice-smaValue)/(0.015*meanDerivation)
-      cciValue.toFloat
+
+      if (cciValue >= 100)
+        ResultTypes.strongBuy
+      else if (cciValue <= -100)
+        ResultTypes.strongSell
+      else if (cciValue < 0 && cciValue > -100)
+        ResultTypes.sell
+      else if (cciValue > 0 && cciValue < 100)
+        ResultTypes.buy
+      else
+        ResultTypes.neutral
     }
     else
-      0
+      ResultTypes.neutral
   }
 }
