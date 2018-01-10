@@ -52,6 +52,10 @@ class indicator(val dataframe: DataFrame) {
   //https://www.investopedia.com/articles/trading/06/aroon.asp
   val aroon_indicator = new aroon(25)
 
+  /** Row Class **/
+  case class Row(Future_price: Float, SMA: Float, EMA: Float, MACD: Float, RSI: Float, STOCH: Float, CCI: Float, AROON: Float)
+
+
   def compute: Unit = {
 
     val spark = SparkSession.builder().appName("Indicator").getOrCreate()
