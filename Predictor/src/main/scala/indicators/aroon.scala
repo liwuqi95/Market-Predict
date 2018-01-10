@@ -41,14 +41,13 @@ class aroon(val dayParam: Int) {
     val aroonUp = ((highIndex.toFloat+1)/25)*100
     val aroonDown = ((lowIndex.toFloat+1)/25)*100
 
-    // up(0) >= 70 && down(1) <= 30, bull
-    // up(0) <= 30 &7 down(1) >= 70, bear
-    // when 30-70, if up cross above down, bull
-    // if down cross above up, bear
-
-    if (aroonUp >= 70 && aroonDown <= 30)
+    if (aroonUp == 100 && aroonDown <= 30)
+      ResultTypes.strongBuy
+    else if (aroonUp <= 30 && aroonDown == 100)
+      ResultTypes.strongSell
+    else if (aroonUp >= 50 && aroonDown <= 50)
       ResultTypes.buy
-    else if (aroonUp <= 30 && aroonDown >= 70)
+    else if (aroonUp <= 50 && aroonDown >= 50)
       ResultTypes.sell
     else
       ResultTypes.neutral
