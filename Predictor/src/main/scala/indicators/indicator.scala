@@ -41,7 +41,6 @@ class indicator(val dataframe: DataFrame) {
   //https://www.investopedia.com/articles/trading/06/aroon.asp
   val aroon_indicator = new aroon(25)
 
-
   def compute: Unit = {
 
     val spark = SparkSession.builder().appName("Indicator").getOrCreate()
@@ -53,7 +52,6 @@ class indicator(val dataframe: DataFrame) {
 
     for (iteration <- DF.orderBy(asc("date")).filter($"price" =!= "null" ).collect()){
       print(iteration + "    ")
-
 
       /** SMA **/
       var isSMAUp:Boolean = false
@@ -99,7 +97,7 @@ class indicator(val dataframe: DataFrame) {
       println("SMA: " + isSMAUp + "   EMA: " + isEMAUp + "   MACD: " + isMACDUp + "   RSI: " + RSIValue + "   STOCH: " + STOCHValue
         + "   CCI: " + CCIValue + "   AROON: " + AROONValue)
 
-      spark.stop()
+
     }
   }
 }
