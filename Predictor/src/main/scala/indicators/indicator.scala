@@ -3,6 +3,7 @@ package indicators
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.functions.asc
 
+
 object DataTypes extends Enumeration {
   val openPrice = 1
   val highPrice = 2
@@ -18,6 +19,42 @@ object ResultTypes extends Enumeration{
   val strongBuy = 2
 }
 
+// Define candle stick
+sealed trait CandleColour
+
+case object Red extends CandleColour
+
+case object Green extends CandleColour
+
+sealed trait CandleTrait {
+  def open: Double
+
+  def high: Double
+
+  def low: Double
+
+  def close: Double
+
+  def volume: Long
+
+  def highWick(): Double = Math.abs(high - Math.max(open, close))
+
+  def lowWick(): Double = Math.abs(low - Math.min(open, close))
+
+  def spread(): Double = Math.abs(close - open)
+
+  def spreadRatio(): Double = spread / spreadWithWicks
+
+  def spreadWithWicks(): Double = high - low
+
+  def colour: CandleColour = if (open > close) Red else Green
+}
+// each candle contains the following data and it also matches the csv file I uploaded
+case class Candle(open: Double,
+                  high: Double,
+                  low: Double,
+                  close: Double,
+                  volume: Long) extends CandleTrait
 
 class indicator(val dataframe: DataFrame) {
 
@@ -103,6 +140,7 @@ class indicator(val dataframe: DataFrame) {
       // when 30-70, if up cross above down, bull
       // if down cross above up, bear
       AROONValue = aroon_indicator.computeAROONResult(iteration.getString(DataTypes.closePrice).toFloat)
+
 
 
       println("SMA: " + isSMAUp + "   EMA: " + isEMAUp + "   MACD: " + isMACDUp + "   RSI: " + RSIValue + "   STOCH: " + STOCHValue
