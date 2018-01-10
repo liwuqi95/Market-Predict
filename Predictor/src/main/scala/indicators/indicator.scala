@@ -100,6 +100,8 @@ class indicator(val dataframe: DataFrame) {
 
   def compute: Unit = {
 
+    val t1 = System.currentTimeMillis
+
     val spark = SparkSession.builder().appName("Indicator").getOrCreate()
 
     import spark.implicits._
@@ -115,91 +117,27 @@ class indicator(val dataframe: DataFrame) {
 
     val UDF_stoch = udf(stoch_indicator.computeSTOCHResult)
 
-    //val UDF_stochrsi = udf(stochrsi_indicator.computeSTOCHRSIResult)
+    val UDF_stochrsi = udf(stochrsi_indicator.computeSTOCHRSIResult)
 
     val UDF_cci = udf(cci_indicator.computeCCIResult)
 
     val UDF_aroon = udf(aroon_indicator.computeAROONResult)
 
-     DF.withColumn("SMA", UDF_sma($"Close"))
-       .withColumn("EMA", UDF_ema($"Close"))
-       .withColumn("MACD", UDF_macd($"Close"))
-       .withColumn("RSI", UDF_rsi($"Close"))
-       .withColumn("STOCH", UDF_stoch($"Close"))
-       .withColumn("CCI", UDF_cci($"Close"))
-       .withColumn("AROON", UDF_aroon($"Close")).show
 
+     DF.filter($"Close" =!= "null")
+       .withColumn("SMA", UDF_sma($"Close")).cache()
+       .withColumn("EMA", UDF_ema($"Close")).cache()
+       .withColumn("MACD", UDF_macd($"Close")).cache()
+       .withColumn("RSI", UDF_rsi($"Close")).cache()
+       .withColumn("STOCH", UDF_stoch($"Close")).cache()
+       .withColumn("STOCH_RSI", UDF_stochrsi($"RSI")).cache()
+       .withColumn("CCI", UDF_cci($"Close")).cache()
+       .withColumn("AROON", UDF_aroon($"Close")).cache()
+       .show(100)
 
+    val t2 = System.currentTimeMillis
 
+    println("Computing indicators uses " + (t2-t1) + " millisecond")
 
-
-
-
-
-
-
-    var cci_counter: Float = 0
-    var total_counter: Float = 0
-
-    val pattern = "dd-MMM-yy hh.mm.ss.S a"
-    //
-    val newDF = DF.orderBy(unix_timestamp(DF("Local time"), pattern).cast("timestamp"))
-
-    for (iteration <- DF.filter($"Close" =!= "null" ).collect()){
-      print(iteration + "    ")
-
-      /** SMA **/
-      var isSMAUp:Int = ResultTypes.invalid
-      isSMAUp = sma_indicator.computeSMAResult(iteration.getString(DataTypes.closePrice).toFloat)
-
-      /** EMA **/
-      var isEMAUp:Int = ResultTypes.invalid
-      isEMAUp = ema_indicator.computeEMAResult(iteration.getString(DataTypes.closePrice).toFloat)
-
-      /** MACD **/
-      var isMACDUp:Int = ResultTypes.invalid
-      isMACDUp = macd_indicator.computeMACDResult(iteration.getString(DataTypes.closePrice).toFloat)
-
-      /** RSI **/
-      var RSIValue:Int = ResultTypes.invalid
-      // this value is only being considered when it is bigger than 70/80 and lower than 30/20
-      // in between, we'll not consider
-      RSIValue = rsi_indicator.computeRSIResult(iteration.getString(DataTypes.closePrice).toFloat)
-
-      /** STOCH **/
-      var STOCHValue: Int = ResultTypes.invalid
-      // this value is considered overbought when above 80, oversold when below 20
-      STOCHValue = stoch_indicator.computeSTOCHResult(iteration.getString(DataTypes.closePrice).toFloat)
-
-      /** STOCHRSI **/
-      var STOCHRSIValue:Int = ResultTypes.invalid
-      // this value is only being considered when it is bigger than 70/80 and lower than 30/20
-      // in between, we'll not consider
-      STOCHRSIValue = stochrsi_indicator.computeSTOCHRSIResult(rsi_indicator.getRSIValue())
-
-      /** CCI **/
-      var CCIValue: Int = ResultTypes.invalid
-      // this value is considered overbought when above 80, oversold when below 20
-      CCIValue = cci_indicator.computeCCIResult(iteration.getString(DataTypes.closePrice).toFloat)
-
-      total_counter += 1
-      if (CCIValue >= -100 && CCIValue <= 100)
-        cci_counter += 1
-
-      /** AROON **/
-      var AROONValue: Int = ResultTypes.invalid
-      // up(0) >= 70 && down(1) <= 30, bull
-      // up(0) <= 30 &7 down(1) >= 70, bear
-      // when 30-70, if up cross above down, bull
-      // if down cross above up, bear
-      AROONValue = aroon_indicator.computeAROONResult(iteration.getString(DataTypes.closePrice).toFloat)
-
-
-
-     // println("SMA: " + isSMAUp + "   EMA: " + isEMAUp + "   MACD: " + isMACDUp + "   RSI: " + RSIValue + "   STOCH: " + STOCHValue
-      //  + "   STOCHRSI: " + STOCHRSIValue + "   CCI: " + CCIValue + "   AROON: " + AROONValue)
-
-
-    }
   }
 }
