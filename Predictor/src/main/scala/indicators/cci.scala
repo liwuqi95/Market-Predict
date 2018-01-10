@@ -65,6 +65,6 @@ class cci(val dayParam: Int) {
         ResultTypes.neutral
     }
     else
-      ResultTypes.neutral
+      ResultTypes.invalid
   }
 }

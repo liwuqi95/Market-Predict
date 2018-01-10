@@ -36,21 +36,25 @@ class aroon(val dayParam: Int) {
 
   def computeAROONResult(data: Float): Int = {
     addData(data)
-    val lowIndex = getLowIndex()
-    val highIndex = getHighIndex()
-    val aroonUp = ((highIndex.toFloat+1)/25)*100
-    val aroonDown = ((lowIndex.toFloat+1)/25)*100
+    if (priceData.length == dayNum) {
+      val lowIndex = getLowIndex()
+      val highIndex = getHighIndex()
+      val aroonUp = ((highIndex.toFloat + 1) / 25) * 100
+      val aroonDown = ((lowIndex.toFloat + 1) / 25) * 100
 
-    if (aroonUp == 100 && aroonDown <= 30)
-      ResultTypes.strongBuy
-    else if (aroonUp <= 30 && aroonDown == 100)
-      ResultTypes.strongSell
-    else if (aroonUp >= 50 && aroonDown <= 50)
-      ResultTypes.buy
-    else if (aroonUp <= 50 && aroonDown >= 50)
-      ResultTypes.sell
+      if (aroonUp == 100 && aroonDown <= 30)
+        ResultTypes.strongBuy
+      else if (aroonUp <= 30 && aroonDown == 100)
+        ResultTypes.strongSell
+      else if (aroonUp >= 50 && aroonDown <= 50)
+        ResultTypes.buy
+      else if (aroonUp <= 50 && aroonDown >= 50)
+        ResultTypes.sell
+      else
+        ResultTypes.neutral
+    }
     else
-      ResultTypes.neutral
+      ResultTypes.invalid
 
   }
 }

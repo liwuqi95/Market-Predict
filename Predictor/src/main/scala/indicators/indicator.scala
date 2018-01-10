@@ -1,7 +1,7 @@
 package indicators
 
 import org.apache.spark.sql.{DataFrame, SparkSession}
-import org.apache.spark.sql.functions.asc
+import org.apache.spark.sql.functions._
 
 object DataTypes extends Enumeration {
   val openPrice = 1
@@ -16,6 +16,7 @@ object ResultTypes extends Enumeration{
   val neutral = 0
   val buy = 1
   val strongBuy = 2
+  val invalid = 3
 }
 
 
@@ -43,6 +44,10 @@ class indicator(val dataframe: DataFrame) {
   //https://www.investopedia.com/university/indicator_oscillator/ind_osc8.asp
   val stoch_indicator = new stoch(14)
 
+  /** STOCHRSI **/
+  //http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:stochrsi
+  val stochrsi_indicator = new stochrsi(14)
+
   /** CCI **/
   //http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:commodity_channel_index_cci
   val cci_indicator = new cci(20)
@@ -61,34 +66,44 @@ class indicator(val dataframe: DataFrame) {
     var cci_counter: Float = 0
     var total_counter: Float = 0
 
+    val pattern = "dd-MMM-yy hh.mm.ss.S a"
+    //
+    val newDF = DF.orderBy(unix_timestamp(DF("Local time"), pattern).cast("timestamp"))
+
     for (iteration <- DF.filter($"Close" =!= "null" ).collect()){
       print(iteration + "    ")
 
       /** SMA **/
-      var isSMAUp:Int = ResultTypes.neutral
+      var isSMAUp:Int = ResultTypes.invalid
       isSMAUp = sma_indicator.computeSMAResult(iteration.getString(DataTypes.closePrice).toFloat)
 
       /** EMA **/
-      var isEMAUp:Int = ResultTypes.neutral
+      var isEMAUp:Int = ResultTypes.invalid
       isEMAUp = ema_indicator.computeEMAResult(iteration.getString(DataTypes.closePrice).toFloat)
 
       /** MACD **/
-      var isMACDUp:Int = ResultTypes.neutral
+      var isMACDUp:Int = ResultTypes.invalid
       isMACDUp = macd_indicator.computeMACDResult(iteration.getString(DataTypes.closePrice).toFloat)
 
       /** RSI **/
-      var RSIValue:Int = ResultTypes.neutral
+      var RSIValue:Int = ResultTypes.invalid
       // this value is only being considered when it is bigger than 70/80 and lower than 30/20
       // in between, we'll not consider
       RSIValue = rsi_indicator.computeRSIResult(iteration.getString(DataTypes.closePrice).toFloat)
 
       /** STOCH **/
-      var STOCHValue: Int = ResultTypes.neutral
+      var STOCHValue: Int = ResultTypes.invalid
       // this value is considered overbought when above 80, oversold when below 20
       STOCHValue = stoch_indicator.computeSTOCHResult(iteration.getString(DataTypes.closePrice).toFloat)
 
+      /** STOCHRSI **/
+      var STOCHRSIValue:Int = ResultTypes.invalid
+      // this value is only being considered when it is bigger than 70/80 and lower than 30/20
+      // in between, we'll not consider
+      STOCHRSIValue = stochrsi_indicator.computeSTOCHRSIResult(rsi_indicator.getRSIValue())
+
       /** CCI **/
-      var CCIValue: Int = ResultTypes.neutral
+      var CCIValue: Int = ResultTypes.invalid
       // this value is considered overbought when above 80, oversold when below 20
       CCIValue = cci_indicator.computeCCIResult(iteration.getString(DataTypes.closePrice).toFloat)
 
@@ -97,7 +112,7 @@ class indicator(val dataframe: DataFrame) {
         cci_counter += 1
 
       /** AROON **/
-      var AROONValue: Int = ResultTypes.neutral
+      var AROONValue: Int = ResultTypes.invalid
       // up(0) >= 70 && down(1) <= 30, bull
       // up(0) <= 30 &7 down(1) >= 70, bear
       // when 30-70, if up cross above down, bull
@@ -106,7 +121,7 @@ class indicator(val dataframe: DataFrame) {
 
 
       println("SMA: " + isSMAUp + "   EMA: " + isEMAUp + "   MACD: " + isMACDUp + "   RSI: " + RSIValue + "   STOCH: " + STOCHValue
-        + "   CCI: " + CCIValue + "   AROON: " + AROONValue)
+        + "   STOCHRSI: " + STOCHRSIValue + "   CCI: " + CCIValue + "   AROON: " + AROONValue)
 
 
     }

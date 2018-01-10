@@ -25,21 +25,25 @@ class sma(val dayParam: Int) {
     }
   }
 
-  def computeSMAResult(data: Float): Int ={
+  def computeSMAResult(data: Float): Int = {
     val average = addData(data)
 
-    if (averageBigger && data > average){
-      previousResult = true
-      averageBigger = false
-    }
-    else if (!averageBigger && data < average) {
-      previousResult = false
-      averageBigger = true
-    }
+    if (priceData.length == dayNum) {
+      if (averageBigger && data > average) {
+        previousResult = true
+        averageBigger = false
+      }
+      else if (!averageBigger && data < average) {
+        previousResult = false
+        averageBigger = true
+      }
 
-    if (previousResult)
-      ResultTypes.buy
+      if (previousResult)
+        ResultTypes.buy
+      else
+        ResultTypes.sell
+    }
     else
-      ResultTypes.sell
+      ResultTypes.invalid
   }
 }
