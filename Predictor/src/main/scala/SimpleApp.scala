@@ -36,8 +36,10 @@ object SimpleApp {
       .format("csv")
       .option("header", "true") //reading the headers
       .option("mode", "DROPMALFORMED")
+      .option("dateFormat", "MM/dd/yyyy ")
       .load("XAUUSD_Candlestick_1_D_BID_01.01.2017-31.12.2017.csv")
 
+   df.show
 
     val gold_indicators = new indicator(df)
 
@@ -63,7 +65,7 @@ object SimpleApp {
     val model = lr.fit(training)
 
 
-  //  println("Model was fit using parameters: " + model.parent.extractParamMap)
+    println("Model was fit using parameters: " + model.parent.extractParamMap)
 
 
     spark.stop()
