@@ -98,7 +98,7 @@ class indicator(val dataframe: DataFrame) {
     var cci_counter: Float = 0
     var total_counter: Float = 0
 
-    for (iteration <- DF.orderBy(asc("Local time")).filter($"Close" =!= "null" ).collect()){
+    for (iteration <- DF.filter($"Close" =!= "null" ).collect()){
       print(iteration + "    ")
 
       /** SMA **/

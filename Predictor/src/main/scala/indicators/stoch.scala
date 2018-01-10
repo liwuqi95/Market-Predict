@@ -43,9 +43,13 @@ class stoch(val dayParam: Int) {
       val PerD: Float = perKData.sum/perKData.length
 
       if (PerD >= 80)
+        ResultTypes.strongSell
+      else if (PerD >= 55 && PerD < 80)
+        ResultTypes.buy
+      else if (PerD <= 45 && PerD > 20)
         ResultTypes.sell
       else if (PerD <= 20)
-        ResultTypes.buy
+        ResultTypes.strongBuy
       else
         ResultTypes.neutral
     }

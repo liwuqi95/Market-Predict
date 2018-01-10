@@ -53,13 +53,13 @@ class cci(val dayParam: Int) {
       val meanDerivation: Float = getMeanDerivation()
       val cciValue = (typicalPrice-smaValue)/(0.015*meanDerivation)
 
-      if (cciValue >= 100)
-        ResultTypes.strongBuy
-      else if (cciValue <= -100)
+      if (cciValue >= 200)
         ResultTypes.strongSell
-      else if (cciValue < 0 && cciValue > -100)
+      else if (cciValue <= -200)
+        ResultTypes.strongBuy
+      else if (cciValue < -50 && cciValue > -200)
         ResultTypes.sell
-      else if (cciValue > 0 && cciValue < 100)
+      else if (cciValue > 50 && cciValue < 200)
         ResultTypes.buy
       else
         ResultTypes.neutral

@@ -31,9 +31,13 @@ class rsi(val dayParam: Int) {
       val rsi_value:Float = 100 - 100/(1+rs)
 
       if (rsi_value >= 70)
+        ResultTypes.strongSell
+      else if (rsi_value >= 55 && rsi_value < 70)
+        ResultTypes.buy
+      else if (rsi_value <= 45 && rsi_value < 30)
         ResultTypes.sell
       else if (rsi_value <= 30)
-        ResultTypes.buy
+        ResultTypes.strongBuy
       else
         ResultTypes.neutral
     }
