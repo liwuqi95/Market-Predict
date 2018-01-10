@@ -107,11 +107,27 @@ class indicator(val dataframe: DataFrame) {
 
     val UDF_sma = udf(sma_indicator.computeSMAResult)
 
-    val UDF_ema = udf(sma_indicator.computeEMAResult)
+    val UDF_ema = udf(ema_indicator.computeEMAResult)
 
+    val UDF_macd = udf(macd_indicator.computeMACDResult)
 
-     DF.withColumn("sma", UDF_sma($"Close")).show
+    val UDF_rsi = udf(rsi_indicator.computeRSIResult)
 
+    val UDF_stoch = udf(stoch_indicator.computeSTOCHResult)
+
+    //val UDF_stochrsi = udf(stochrsi_indicator.computeSTOCHRSIResult)
+
+    val UDF_cci = udf(cci_indicator.computeCCIResult)
+
+    val UDF_aroon = udf(aroon_indicator.computeAROONResult)
+
+     DF.withColumn("SMA", UDF_sma($"Close"))
+       .withColumn("EMA", UDF_ema($"Close"))
+       .withColumn("MACD", UDF_macd($"Close"))
+       .withColumn("RSI", UDF_rsi($"Close"))
+       .withColumn("STOCH", UDF_stoch($"Close"))
+       .withColumn("CCI", UDF_cci($"Close"))
+       .withColumn("AROON", UDF_aroon($"Close")).show
 
 
 

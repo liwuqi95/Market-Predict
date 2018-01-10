@@ -1,6 +1,6 @@
 package indicators
 
-class aroon(val dayParam: Int) {
+class aroon(val dayParam: Int) extends Serializable {
   var dayNum: Int = dayParam
   var priceData : List[Float] = List()
 
@@ -34,7 +34,7 @@ class aroon(val dayParam: Int) {
     index
   }
 
-  def computeAROONResult(data: Float): Int = {
+  val computeAROONResult = (data: Float) => {
     addData(data)
     if (priceData.length == dayNum) {
       val lowIndex = getLowIndex()

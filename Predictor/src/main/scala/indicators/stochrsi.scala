@@ -1,6 +1,6 @@
 package indicators
 
-class stochrsi(val dayParam: Int) {
+class stochrsi(val dayParam: Int) extends Serializable {
   var dayNum: Int = dayParam
 
   var rsiData : List[Float] = List()
@@ -29,7 +29,7 @@ class stochrsi(val dayParam: Int) {
     max
   }
 
-  def computeSTOCHRSIResult(data: Float): Int = {
+  val computeSTOCHRSIResult = (data: Float) => {
     addData(data)
     if (rsiData.length != dayNum){
       ResultTypes.invalid

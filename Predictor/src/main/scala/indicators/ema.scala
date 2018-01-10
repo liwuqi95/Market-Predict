@@ -1,6 +1,6 @@
 package indicators
 
-class ema(val dayParam: Int) {
+class ema(val dayParam: Int) extends Serializable {
   var dayNum: Int = dayParam
 
   var priceData : List[Float] = List()
@@ -24,7 +24,7 @@ class ema(val dayParam: Int) {
     }
   }
 
-  def computeEMAResult(data: Float): Int ={
+  val computeEMAResult = (data: Float) => {
     addData(data)
 
     if (priceData.length == dayNum) {

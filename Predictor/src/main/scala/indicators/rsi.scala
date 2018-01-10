@@ -1,6 +1,6 @@
 package indicators
 
-class rsi(val dayParam: Int) {
+class rsi(val dayParam: Int) extends Serializable {
   val dayNum:Int = dayParam
 
   var priceData : List[Float] = List()
@@ -17,7 +17,7 @@ class rsi(val dayParam: Int) {
     prevRSIValue
   }
 
-  def computeRSIResult(data: Float):Int ={
+  val computeRSIResult = (data: Float) => {
     addData(data)
 
     if (priceData.length == dayNum+1){

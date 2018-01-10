@@ -1,6 +1,6 @@
 package indicators
 
-class stoch(val dayParam: Int) {
+class stoch(val dayParam: Int) extends Serializable {
   var dayNum: Int = dayParam
 
   var priceData : List[Float] = List()
@@ -30,7 +30,7 @@ class stoch(val dayParam: Int) {
     max
   }
 
-  def computeSTOCHResult(data: Float): Int = {
+  val computeSTOCHResult = (data: Float) => {
     addData(data)
     if (priceData.length == dayNum) {
       var high: Float = getHigh()

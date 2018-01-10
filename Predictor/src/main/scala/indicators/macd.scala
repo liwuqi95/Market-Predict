@@ -1,6 +1,6 @@
 package indicators
 
-class macd(val dayParam1: Int, val dayParam2: Int) {
+class macd(val dayParam1: Int, val dayParam2: Int) extends Serializable {
   var firstSma:sma = new sma(dayParam1)
   var secondSma:sma = new sma(dayParam2)
   var dayCounter: Int = 0
@@ -8,7 +8,7 @@ class macd(val dayParam1: Int, val dayParam2: Int) {
   var trendFirstBigger:Boolean = false
   var previousResult:Boolean = false
 
-  def computeMACDResult(data: Float): Int ={
+  val computeMACDResult = (data: Float) => {
     val firstData = firstSma.addData(data)
     val secondData = secondSma.addData(data)
     dayCounter += 1
