@@ -11,7 +11,7 @@ object DataTypes extends Enumeration {
   val closePrice = 4
 }
 
-object ResultTypes extends Enumeration{
+object ResultTypes extends Enumeration {
   val strongSell = -2
   val sell = -1
   val neutral = 0
@@ -50,6 +50,7 @@ sealed trait CandleTrait {
 
   def colour: CandleColour = if (open > close) Red else Green
 }
+
 // each candle contains the following data and it also matches the csv file I uploaded
 case class Candle(open: Double,
                   high: Double,
@@ -59,7 +60,7 @@ case class Candle(open: Double,
 
 class indicator(val dataframe: DataFrame) {
 
-  val DF: DataFrame = dataframe
+  var DF: DataFrame = dataframe
 
   /** SMA **/
   //https://www.investopedia.com/articles/technical/052201.asp
@@ -124,20 +125,34 @@ class indicator(val dataframe: DataFrame) {
     val UDF_aroon = udf(aroon_indicator.computeAROONResult)
 
 
-     DF.filter($"Close" =!= "null")
-       .withColumn("SMA", UDF_sma($"Close")).cache()
-       .withColumn("EMA", UDF_ema($"Close")).cache()
-       .withColumn("MACD", UDF_macd($"Close")).cache()
-       .withColumn("RSI", UDF_rsi($"Close")).cache()
-       .withColumn("STOCH", UDF_stoch($"Close")).cache()
-       .withColumn("STOCH_RSI", UDF_stochrsi($"RSI")).cache()
-       .withColumn("CCI", UDF_cci($"Close")).cache()
-       .withColumn("AROON", UDF_aroon($"Close")).cache()
-       .show(100)
+    DF = DF.filter($"Close" =!= "null")
+      .withColumn("SMA", UDF_sma($"Close")).cache()
+      .withColumn("EMA", UDF_ema($"Close")).cache()
+      .withColumn("MACD", UDF_macd($"Close")).cache()
+      .withColumn("RSI", UDF_rsi($"Close")).cache()
+      .withColumn("STOCH", UDF_stoch($"Close")).cache()
+      .withColumn("STOCH_RSI", UDF_stochrsi($"RSI")).cache()
+      .withColumn("CCI", UDF_cci($"Close")).cache()
+      .withColumn("AROON", UDF_aroon($"Close")).cache()
+      .filter($"SMA" =!= 3)
+      .filter($"EMA" =!= 3)
+      .filter($"MACD" =!= 3)
+      .filter($"RSI" =!= 3)
+      .filter($"STOCH" =!= 3)
+      .filter($"STOCH_RSI" =!= 3)
+      .filter($"CCI" =!= 3)
+      .filter($"AROON" =!= 3)
+      .drop("High")
+      .drop("Open")
+      .drop("Low")
+      .drop("Volume")
+      .drop("Local time")
+
+    DF.show(100)
 
     val t2 = System.currentTimeMillis
 
-    println("Computing indicators uses " + (t2-t1) + " millisecond")
+    println("Computing indicators uses " + (t2 - t1) + " millisecond")
 
   }
 }
