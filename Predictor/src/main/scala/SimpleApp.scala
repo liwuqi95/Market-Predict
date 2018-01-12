@@ -34,11 +34,18 @@ object SimpleApp {
     //df.select($"Local time", to_timestamp($"Local time", "dd.MM.yyy HH:mm:ss.SSS")).show
 
     df.withColumn("time",to_timestamp($"Local time", "dd.MM.yyyy HH:mm:ss.SSS"))
-      .drop($"Local time").show
+      .drop($"Local time")
     
     val gold_indicators = new indicator(df)
 
     gold_indicators.compute
+
+
+    val gold_learner = new Learner()
+
+    gold_learner.Initialize(gold_indicators.getDF())
+
+    gold_learner.train()
 
 
     val training = spark.createDataFrame(Seq(
