@@ -138,7 +138,7 @@ class indicator(val dataframe: DataFrame) {
       .withColumn("STOCH_RSI", UDF_stochrsi($"RSI")).cache()
       .withColumn("CCI", UDF_cci($"price")).cache()
       .withColumn("AROON", UDF_aroon($"price")).cache()
-      .withColumn("label", lead("price", 7, 3).over(win))
+      .withColumn("label", lead("price", 1, 3).over(win))
 
       .filter($"SMA" =!= 3)
       .filter($"EMA" =!= 3)

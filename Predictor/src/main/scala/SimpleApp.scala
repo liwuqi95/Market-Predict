@@ -41,6 +41,7 @@ object SimpleApp {
     gold_learner.Initialize(gold_indicators.getDF())
 
     gold_learner.train()
+    gold_learner.analyze()
 
     
     spark.stop()
