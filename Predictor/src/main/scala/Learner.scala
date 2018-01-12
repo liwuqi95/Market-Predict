@@ -24,7 +24,7 @@ class Learner() {
     DF = DF.drop("Close").drop("SMA").drop("EMA").drop("MACD")
       .drop("RSI").drop("STOCH").drop("STOCH_RSI").drop("CCI").drop("AROON").drop("price")
 
-    DF.show
+   // DF.show
   }
 
 

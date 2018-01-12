@@ -7,7 +7,7 @@ class DataLoader {
 
   import spark.implicits._
 
-  def getDataFrames(fileName: String): DataFrame = {
+  def getDF(fileName: String): DataFrame = {
     val df = spark.read
       .format("csv")
       .option("header", "true") //reading the headers

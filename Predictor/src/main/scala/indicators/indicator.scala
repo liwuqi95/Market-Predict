@@ -105,13 +105,11 @@ class indicator(val dataframe: DataFrame) {
 
     val t1 = System.currentTimeMillis
 
-    val spark = SparkSession.builder().appName("Indicator").getOrCreate()
+    val spark = SparkSession.builder().appName("Predictor").getOrCreate()
 
     import spark.implicits._
 
-
     val win = Window.orderBy("time")
-
 
     val UDF_sma = udf(sma_indicator.computeSMAResult)
 
@@ -130,16 +128,17 @@ class indicator(val dataframe: DataFrame) {
     val UDF_aroon = udf(aroon_indicator.computeAROONResult)
 
 
-    DF = DF.filter($"Close" =!= "null")
-      .withColumn("SMA", UDF_sma($"Close")).cache()
-      .withColumn("EMA", UDF_ema($"Close")).cache()
-      .withColumn("MACD", UDF_macd($"Close")).cache()
-      .withColumn("RSI", UDF_rsi($"Close")).cache()
-      .withColumn("STOCH", UDF_stoch($"Close")).cache()
+    DF = DF
+      .withColumn("price", $"Close".cast("float"))
+      .withColumn("SMA", UDF_sma($"price")).cache()
+      .withColumn("EMA", UDF_ema($"price")).cache()
+      .withColumn("MACD", UDF_macd($"price")).cache()
+      .withColumn("RSI", UDF_rsi($"price")).cache()
+      .withColumn("STOCH", UDF_stoch($"price")).cache()
       .withColumn("STOCH_RSI", UDF_stochrsi($"RSI")).cache()
-      .withColumn("CCI", UDF_cci($"Close")).cache()
-      .withColumn("AROON", UDF_aroon($"Close")).cache()
-
+      .withColumn("CCI", UDF_cci($"price")).cache()
+      .withColumn("AROON", UDF_aroon($"price")).cache()
+      .withColumn("label", lead("price", 7, 3).over(win))
 
       .filter($"SMA" =!= 3)
       .filter($"EMA" =!= 3)
@@ -149,35 +148,23 @@ class indicator(val dataframe: DataFrame) {
       .filter($"STOCH_RSI" =!= 3)
       .filter($"CCI" =!= 3)
       .filter($"AROON" =!= 3)
+      .filter($"label" =!= 3)
+
       .drop("High")
       .drop("Open")
       .drop("Low")
       .drop("Volume")
+      .drop("time")
+      .drop("Close")
 
-      .withColumn("future", lag("Close", 7, 3).over(win))
-      .drop("Local time")
-      .filter($"future" =!= 3)
-        .withColumn("price", $"Close".cast("float"))
-
-
-    val assembler = new VectorAssembler().
-      setInputCols(Array("SMA", "EMA", "MACD","RSI","STOCH", "STOCH_RSI", "CCI", "AROON","price")).
-      setOutputCol("indcators")
-
-
-
-    DF = assembler.transform(DF)
-
-    DF = DF.drop("Close").drop("SMA").drop("EMA").drop("MACD")
-      .drop("RSI").drop("STOCH").drop("STOCH_RSI").drop("CCI").drop("AROON").drop("price")
-
-
-
-    DF.show(1000)
 
     val t2 = System.currentTimeMillis
 
     println("Computing indicators uses " + (t2 - t1) + " millisecond")
 
+  }
+
+  def getDF(): DataFrame ={
+    DF
   }
 }

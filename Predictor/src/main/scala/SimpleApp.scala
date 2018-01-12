@@ -1,8 +1,7 @@
 /* SimpleApp.scala */
 
 import indicators._
-import org.apache.spark.sql.functions._
-import org.apache.spark.sql.types._
+
 import org.apache.spark.ml.linalg.{Vector, Vectors}
 import org.apache.spark.sql.{Row, SparkSession}
 import org.apache.spark.{SparkConf, SparkContext}
@@ -19,39 +18,31 @@ object SimpleApp {
     val sc = new SparkContext(conf)
     sc.setLogLevel("ERROR")
 
+
+
+
+    // Set spark Session
     val spark = SparkSession.builder().appName("Predictor").getOrCreate()
 
 
-    val goldLoader: DataLoader = new DataLoader
-    val goldDF = goldLoader.getDataFrames("XAUUSD_Candlestick_1_D_BID_01.01.2017-31.12.2017.csv")
-    
-    val gold_indicators = new indicator(goldDF)
+    // Initialize data loader
+    val goldLoader: DataLoader = new DataLoader()
+
+    // Initialize indicators
+    val gold_indicators = new indicator(goldLoader.getDF("XAUUSD_Candlestick_1_D_BID_01.01.2017-31.12.2017.csv"))
 
     gold_indicators.compute
 
-
-    val training = spark.createDataFrame(Seq(
-      (1.0, Vectors.dense(0.0, 1.1, 0.1)),
-      (0.0, Vectors.dense(2.0, 1.0, -1.0)),
-      (0.0, Vectors.dense(2.0, 1.3, 1.0)),
-      (1.0, Vectors.dense(0.0, 1.2, -0.5))
-    )).toDF("label", "features")
-
-   // training.show
+    // Initialize learner
 
 
-    val lr = new LogisticRegression()
+    val gold_learner = new Learner()
 
-    lr.setMaxIter(10)
-      .setRegParam(0.01)
+    gold_learner.Initialize(gold_indicators.getDF())
 
+    gold_learner.train()
 
-    val model = lr.fit(training)
-
-
-   // println("Model was fit using parameters: " + model.parent.extractParamMap)
-
-
+    
     spark.stop()
   }
 }
