@@ -24,13 +24,6 @@ object SimpleApp {
     import spark.implicits._
 
 
-    // Open Gold Json file and load data
-    val goldJson = spark.read.json("gold.json")
-    val goldData = goldJson.select($"dataset.data")
-    val goldDF = goldData.withColumn("data", explode($"data"))
-      .withColumn("date", $"data" (0))
-      .withColumn("price", $"data" (1))
-      .drop("data")
   // OPen csv file and load gold data
     val df = spark.read
       .format("csv")
@@ -42,9 +35,9 @@ object SimpleApp {
     df.withColumn("time",to_timestamp($"Local time", "dd.MM.yyyy HH:mm:ss.SSS"))
       .drop($"Local time").show
     
-    //val gold_indicators = new indicator(dffinal)
+    val gold_indicators = new indicator(df)
 
-    //gold_indicators.compute
+    gold_indicators.compute
 
 
     val training = spark.createDataFrame(Seq(
@@ -54,7 +47,7 @@ object SimpleApp {
       (1.0, Vectors.dense(0.0, 1.2, -0.5))
     )).toDF("label", "features")
 
-    training.show
+   // training.show
 
 
     val lr = new LogisticRegression()
@@ -66,7 +59,7 @@ object SimpleApp {
     val model = lr.fit(training)
 
 
-    println("Model was fit using parameters: " + model.parent.extractParamMap)
+   // println("Model was fit using parameters: " + model.parent.extractParamMap)
 
 
     spark.stop()
