@@ -110,13 +110,7 @@ class indicator(val dataframe: DataFrame) {
     import spark.implicits._
 
 
-    val win = Window.orderBy("Local Time")
-
-
-//    DF.withColumn( "movingAvg",
-//      avg($"Close").over(win_sma)).show()
-
-
+    val win = Window.orderBy("time")
 
 
     val UDF_sma = udf(sma_indicator.computeSMAResult)

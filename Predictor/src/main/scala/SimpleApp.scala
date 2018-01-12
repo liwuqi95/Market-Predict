@@ -21,22 +21,11 @@ object SimpleApp {
 
     val spark = SparkSession.builder().appName("Predictor").getOrCreate()
 
-    import spark.implicits._
 
-
-  // OPen csv file and load gold data
-    val df = spark.read
-      .format("csv")
-      .option("header", "true") //reading the headers
-      .option("mode", "DROPMALFORMED")
-      .load("XAUUSD_Candlestick_1_D_BID_01.01.2017-31.12.2017.csv")
-
-    //df.select($"Local time", to_timestamp($"Local time", "dd.MM.yyy HH:mm:ss.SSS")).show
-
-    df.withColumn("time",to_timestamp($"Local time", "dd.MM.yyyy HH:mm:ss.SSS"))
-      .drop($"Local time").show
+    val goldLoader: DataLoader = new DataLoader
+    val goldDF = goldLoader.getDataFrames("XAUUSD_Candlestick_1_D_BID_01.01.2017-31.12.2017.csv")
     
-    val gold_indicators = new indicator(df)
+    val gold_indicators = new indicator(goldDF)
 
     gold_indicators.compute
 
