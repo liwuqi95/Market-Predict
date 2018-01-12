@@ -97,17 +97,21 @@ class indicator(val dataframe: DataFrame) {
   //https://www.investopedia.com/articles/trading/06/aroon.asp
   val aroon_indicator = new aroon(25)
 
+  /** Row Class **/
+  case class Row(Future_price: Float, SMA: Float, EMA: Float, MACD: Float, RSI: Float, STOCH: Float, CCI: Float, AROON: Float)
+
 
   def compute: Unit = {
+
+    val t1 = System.currentTimeMillis
 
     val spark = SparkSession.builder().appName("Indicator").getOrCreate()
 
     import spark.implicits._
 
 
-    val t1 = System.currentTimeMillis
+    val win = Window.orderBy("time")
 
-    val win = Window.orderBy("Local Time")
 
     val UDF_sma = udf(sma_indicator.computeSMAResult)
 
@@ -149,19 +153,31 @@ class indicator(val dataframe: DataFrame) {
       .drop("Open")
       .drop("Low")
       .drop("Volume")
-      .withColumn("price", $"Close".cast("float"))
-      .withColumn("label", lag("price", 7, 3).over(win))
-      .drop("Local time")
-      .filter($"label" =!= 3)
 
+      .withColumn("future", lag("Close", 7, 3).over(win))
+      .drop("Local time")
+      .filter($"future" =!= 3)
+        .withColumn("price", $"Close".cast("float"))
+
+
+    val assembler = new VectorAssembler().
+      setInputCols(Array("SMA", "EMA", "MACD","RSI","STOCH", "STOCH_RSI", "CCI", "AROON","price")).
+      setOutputCol("indcators")
+
+
+
+    DF = assembler.transform(DF)
+
+    DF = DF.drop("Close").drop("SMA").drop("EMA").drop("MACD")
+      .drop("RSI").drop("STOCH").drop("STOCH_RSI").drop("CCI").drop("AROON").drop("price")
+
+
+
+    DF.show(1000)
 
     val t2 = System.currentTimeMillis
 
     println("Computing indicators uses " + (t2 - t1) + " millisecond")
 
-  }
-
-  def getDF(): DataFrame = {
-    DF
   }
 }
