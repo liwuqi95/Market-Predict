@@ -28,6 +28,7 @@ class sma(val dayParam: Int) extends Serializable {
   val computeSMAResult = (data: Float) => {
     val average = addData(data)
 
+
     if (priceData.length == dayNum) {
       if (averageBigger && data > average) {
         previousResult = true

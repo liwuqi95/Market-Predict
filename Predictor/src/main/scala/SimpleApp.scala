@@ -32,6 +32,7 @@ object SimpleApp {
       .option("dateFormat", "MM/dd/yyyy ")
       .load("XAUUSD_Candlestick_1_D_BID_01.01.2017-31.12.2017.csv")
 
+    //df.select($"Local time", to_timestamp($"Local time", "dd.MM.yyy HH:mm:ss.SSS")).show
 
 
     val gold_indicators = new indicator(df)

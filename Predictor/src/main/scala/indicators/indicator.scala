@@ -2,7 +2,9 @@ package indicators
 
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.functions._
-
+import org.apache.spark.sql.functions.column
+import org.apache.spark.sql.expressions.Window
+import org.apache.spark.ml.feature.VectorAssembler
 
 object DataTypes extends Enumeration {
   val openPrice = 1
@@ -64,7 +66,7 @@ class indicator(val dataframe: DataFrame) {
 
   /** SMA **/
   //https://www.investopedia.com/articles/technical/052201.asp
-  val sma_indicator = new sma(50)
+  val sma_indicator = new sma(5)
 
   /** EMA **/
   //https://www.investopedia.com/terms/e/ema.asp
@@ -108,6 +110,15 @@ class indicator(val dataframe: DataFrame) {
     import spark.implicits._
 
 
+    val win = Window.orderBy("Local Time")
+
+
+//    DF.withColumn( "movingAvg",
+//      avg($"Close").over(win_sma)).show()
+
+
+
+
     val UDF_sma = udf(sma_indicator.computeSMAResult)
 
     val UDF_ema = udf(ema_indicator.computeEMAResult)
@@ -134,6 +145,8 @@ class indicator(val dataframe: DataFrame) {
       .withColumn("STOCH_RSI", UDF_stochrsi($"RSI")).cache()
       .withColumn("CCI", UDF_cci($"Close")).cache()
       .withColumn("AROON", UDF_aroon($"Close")).cache()
+
+
       .filter($"SMA" =!= 3)
       .filter($"EMA" =!= 3)
       .filter($"MACD" =!= 3)
@@ -146,9 +159,27 @@ class indicator(val dataframe: DataFrame) {
       .drop("Open")
       .drop("Low")
       .drop("Volume")
-      .drop("Local time")
 
-    DF.show(100)
+      .withColumn("future", lag("Close", 7, 3).over(win))
+      .drop("Local time")
+      .filter($"future" =!= 3)
+        .withColumn("price", $"Close".cast("float"))
+
+
+    val assembler = new VectorAssembler().
+      setInputCols(Array("SMA", "EMA", "MACD","RSI","STOCH", "STOCH_RSI", "CCI", "AROON","price")).
+      setOutputCol("indcators")
+
+
+
+    DF = assembler.transform(DF)
+
+    DF = DF.drop("Close").drop("SMA").drop("EMA").drop("MACD")
+      .drop("RSI").drop("STOCH").drop("STOCH_RSI").drop("CCI").drop("AROON").drop("price")
+
+
+
+    DF.show(1000)
 
     val t2 = System.currentTimeMillis
 
