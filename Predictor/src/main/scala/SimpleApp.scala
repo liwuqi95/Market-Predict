@@ -36,14 +36,15 @@ object SimpleApp {
       .format("csv")
       .option("header", "true") //reading the headers
       .option("mode", "DROPMALFORMED")
-      .option("dateFormat", "MM/dd/yyyy ")
       .load("XAUUSD_Candlestick_1_D_BID_01.01.2017-31.12.2017.csv")
 
-   df.show
 
-    val gold_indicators = new indicator(df)
+    df.withColumn("time",to_timestamp($"Local time", "dd.MM.yyyy HH:mm:ss.SSS"))
+      .drop($"Local time").show
+    
+    //val gold_indicators = new indicator(dffinal)
 
-    gold_indicators.compute
+    //gold_indicators.compute
 
 
     val training = spark.createDataFrame(Seq(
