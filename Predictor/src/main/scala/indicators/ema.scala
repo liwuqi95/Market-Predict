@@ -1,6 +1,6 @@
 package indicators
 
-class ema(val dayParam: Int) extends Serializable {
+class ema(val dayParam: Int) {
   var dayNum: Int = dayParam
 
   var priceData : List[Float] = List()
@@ -24,29 +24,24 @@ class ema(val dayParam: Int) extends Serializable {
     }
   }
 
-  val computeEMAResult = (data: Float) => {
+  def computeEMAResult(data: Float): Int ={
     addData(data)
+    val simpleAverage = getSumAverage()
+    val multiplier = 2/(dayNum+1)
+    val exponentialAverage = (data-previousEMA)*multiplier+previousEMA
 
-    if (priceData.length == dayNum) {
-      val simpleAverage = getSumAverage()
-      val multiplier = 2 / (dayNum + 1)
-      val exponentialAverage = (data - previousEMA) * multiplier + previousEMA
-
-      if (averageBigger && data > exponentialAverage) {
-        previousResult = true
-        averageBigger = false
-      }
-      else if (!averageBigger && data < exponentialAverage) {
-        previousResult = false
-        averageBigger = true
-      }
-
-      if (previousResult)
-        ResultTypes.buy
-      else
-        ResultTypes.sell
+    if (averageBigger && data > exponentialAverage){
+      previousResult = true
+      averageBigger = false
     }
+    else if (!averageBigger && data < exponentialAverage) {
+      previousResult = false
+      averageBigger = true
+    }
+
+    if (previousResult)
+      ResultTypes.buy
     else
-      ResultTypes.invalid
+      ResultTypes.sell
   }
 }

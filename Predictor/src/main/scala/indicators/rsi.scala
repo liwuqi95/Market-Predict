@@ -1,11 +1,9 @@
 package indicators
 
-class rsi(val dayParam: Int) extends Serializable {
+class rsi(val dayParam: Int) {
   val dayNum:Int = dayParam
 
   var priceData : List[Float] = List()
-
-  var prevRSIValue: Float = 50
 
   def addData(data: Float): Unit ={
     priceData = priceData :+ data
@@ -13,11 +11,7 @@ class rsi(val dayParam: Int) extends Serializable {
       priceData = priceData.drop(1)
   }
 
-  def getRSIValue(): Float = {
-    prevRSIValue
-  }
-
-  val computeRSIResult = (data: Float) => {
+  def computeRSIResult(data: Float):Int ={
     addData(data)
 
     if (priceData.length == dayNum+1){
@@ -35,7 +29,6 @@ class rsi(val dayParam: Int) extends Serializable {
 
       val rs:Float = upSum/downSum
       val rsi_value:Float = 100 - 100/(1+rs)
-      prevRSIValue = rsi_value
 
       if (rsi_value >= 70)
         ResultTypes.strongSell
@@ -49,7 +42,7 @@ class rsi(val dayParam: Int) extends Serializable {
         ResultTypes.neutral
     }
     else{
-      ResultTypes.invalid
+      ResultTypes.neutral
     }
   }
 }

@@ -1,6 +1,6 @@
 package indicators
 
-class cci(val dayParam: Int) extends Serializable {
+class cci(val dayParam: Int) {
   var dayNum: Int = dayParam
 
   var normalPriceData : List[Float] = List()
@@ -41,7 +41,7 @@ class cci(val dayParam: Int) extends Serializable {
     sum/typicalPriceData.length
   }
 
-  val computeCCIResult = (data: Float) => {
+  def computeCCIResult(data: Float): Int ={
     normalPriceData = addData(data, normalPriceData)
     val normalHigh: Float = getHigh(normalPriceData)
     val normalLow: Float = getLow(normalPriceData)
@@ -65,6 +65,6 @@ class cci(val dayParam: Int) extends Serializable {
         ResultTypes.neutral
     }
     else
-      ResultTypes.invalid
+      ResultTypes.neutral
   }
 }

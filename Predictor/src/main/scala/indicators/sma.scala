@@ -1,6 +1,6 @@
 package indicators
 
-class sma(val dayParam: Int) extends Serializable {
+class sma(val dayParam: Int) {
   var dayNum: Int = dayParam
 
   var priceData : List[Float] = List()
@@ -25,26 +25,21 @@ class sma(val dayParam: Int) extends Serializable {
     }
   }
 
-  val computeSMAResult = (data: Float) => {
+  def computeSMAResult(data: Float): Int ={
     val average = addData(data)
 
-
-    if (priceData.length == dayNum) {
-      if (averageBigger && data > average) {
-        previousResult = true
-        averageBigger = false
-      }
-      else if (!averageBigger && data < average) {
-        previousResult = false
-        averageBigger = true
-      }
-
-      if (previousResult)
-        ResultTypes.buy
-      else
-        ResultTypes.sell
+    if (averageBigger && data > average){
+      previousResult = true
+      averageBigger = false
     }
+    else if (!averageBigger && data < average) {
+      previousResult = false
+      averageBigger = true
+    }
+
+    if (previousResult)
+      ResultTypes.buy
     else
-      ResultTypes.invalid
+      ResultTypes.sell
   }
 }

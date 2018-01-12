@@ -1,6 +1,6 @@
 package indicators
 
-class aroon(val dayParam: Int) extends Serializable {
+class aroon(val dayParam: Int) {
   var dayNum: Int = dayParam
   var priceData : List[Float] = List()
 
@@ -34,27 +34,23 @@ class aroon(val dayParam: Int) extends Serializable {
     index
   }
 
-  val computeAROONResult = (data: Float) => {
+  def computeAROONResult(data: Float): Int = {
     addData(data)
-    if (priceData.length == dayNum) {
-      val lowIndex = getLowIndex()
-      val highIndex = getHighIndex()
-      val aroonUp = ((highIndex.toFloat + 1) / 25) * 100
-      val aroonDown = ((lowIndex.toFloat + 1) / 25) * 100
+    val lowIndex = getLowIndex()
+    val highIndex = getHighIndex()
+    val aroonUp = ((highIndex.toFloat+1)/25)*100
+    val aroonDown = ((lowIndex.toFloat+1)/25)*100
 
-      if (aroonUp == 100 && aroonDown <= 30)
-        ResultTypes.strongBuy
-      else if (aroonUp <= 30 && aroonDown == 100)
-        ResultTypes.strongSell
-      else if (aroonUp >= 50 && aroonDown <= 50)
-        ResultTypes.buy
-      else if (aroonUp <= 50 && aroonDown >= 50)
-        ResultTypes.sell
-      else
-        ResultTypes.neutral
-    }
+    if (aroonUp == 100 && aroonDown <= 30)
+      ResultTypes.strongBuy
+    else if (aroonUp <= 30 && aroonDown == 100)
+      ResultTypes.strongSell
+    else if (aroonUp >= 50 && aroonDown <= 50)
+      ResultTypes.buy
+    else if (aroonUp <= 50 && aroonDown >= 50)
+      ResultTypes.sell
     else
-      ResultTypes.invalid
+      ResultTypes.neutral
 
   }
 }
