@@ -1,0 +1,30 @@
+{
+  "name": "csc309",
+  "version": "1.0.0",
+  "description": "assignment-3-blackjack-1 created by GitHub Classroom",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://liwuqi95@github.com/csc309-18s/assignment-3-blackjack-1.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/csc309-18s/assignment-3-blackjack-1/issues"
+  },
+  "homepage": "https://github.com/csc309-18s/assignment-3-blackjack-1#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "mongodb": "^3.0.5",
+    "mongoose": "^5.0.12",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "password-hash": "^1.2.2"
+  }
+}

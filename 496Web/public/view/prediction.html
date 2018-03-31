@@ -1,0 +1,49 @@
+<div ng-controller="predictionController as prediction">
+    <br>
+    <div class="row">
+        <div class="col-md-3 col-sm-4 ">
+            <br>
+            <div class="instrument-scroll ">
+                <div ng-repeat="instrument in instrumentList |  orderBy:'toString()' ">
+                    <br>
+                    <button ng-click="changeInstrument(instrument)" href="#" type="button"
+                            class="btn {{instrument == current_instrument ? 'btn-primary':'btn-secondary'}} btn-block">
+                        {{instrument}}
+                    </button>
+                </div>
+                <br>
+                <a class="btn btn-outline-success btn-block" href="#!instruments"><strong>+</strong> Instruments</a>
+            </div>
+        </div>
+
+
+        <div class="col-md-9 col-sm-8">
+            <h2 class="text-center">Smart trading prediction </h2>
+            <br>
+
+            <div ng-if="showMessage">
+            <div class="alert alert-{{alertStyle}}" role="alert">
+                <strong>{{}}</strong> {{message}}
+            </div>
+            </div>
+            <div class="row">
+
+                <canvas width='1500' height='815' id="line" class="chart chart-line" chart-data="data"
+                        chart-options="options" chart-labels="labels"></canvas>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Select a time period (days)</label>
+                    <select class="form-control" ng-model="period"
+                            ng-options="idx as period for (idx, period) in periods"></select>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <button class=" btn btn-block btn-outline-primary" ng-click="predict()"> Predict</button>
+            </div>
+        </div>
+
+    </div>
+</div>

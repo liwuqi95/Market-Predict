@@ -1,0 +1,56 @@
+<div ng-controller="NewsController as news">
+    <br>
+
+<h2 class="text-center">News Calender</h2>
+    
+    <div class="row">
+
+        <div class="col-md-3 col-sm-4 ">
+            <div class="instrument-scroll">
+                <div ng-repeat="instrument in instrumentList |  orderBy:'toString()' ">
+                    <br>
+                    <button ng-click="changeInstrument(instrument)" href="#" type="button"
+                            class="btn {{instrument == current_instrument ? 'btn-primary':'btn-secondary'}} btn-block">
+                        {{instrument}}
+                    </button>
+                </div>
+                <br>
+                <a class="btn btn-outline-success btn-block" href="#!instruments"><strong>+</strong> Instruments</a>
+            </div>
+        </div>
+
+        <div class="col-md-9 col-sm-8">
+            <br>
+            <div class="news-scroll">
+                <div ng-repeat="news in listNews">
+
+                    <div class="card card-outline-primary mb-3 text-center">
+                        <div class="card-block">
+                            <blockquote class="card-blockquote">
+                                <div>
+                                    <p class="text-left"><strong>{{news.title}}</strong></p>
+                                    <p class="alignright">{{news.timestamp *1000 | date:'MM/dd/yyyy @ h:mma'}} </p>
+                                </div>
+                                <div>
+                                <p class="alignleft">Actual: <strong>{{news.actual}} </strong>{{news.market == null? 'Previous' : 'Market'}}
+                                    <strong> {{news.market == null? news.previous : news.market}}</strong>
+                                </p></div>
+                            </blockquote>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+
+
+
+
+            </div>
+        </div>
+
+
+
+</div>
+</div>

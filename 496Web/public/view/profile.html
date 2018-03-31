@@ -1,0 +1,148 @@
+<div ng-controller="ProfileController as profile">
+    <br>
+    <div class="jumbotron">
+        <h1>Hello, trader!</h1>
+        <h5>BlackJack is a trader tool that help you manage your account in Oanda.</h5>
+
+        <button class="btn btn-primary btn-lg" ng-click="learnMore()">Learn more</button>
+
+    </div>
+    <!-- Four box at top of profile page -->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card card-outline-primary mb-3 text-center">
+                <div class="card-block h-99">
+                    <blockquote class="card-blockquote">
+                        <h2>Total Account Balance</h2>
+                        <h5>${{summary.account.balance}}</h5>
+
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card card-outline-secondary mb-3 text-center">
+                <div class="card-block h-20">
+                    <blockquote class="card-blockquote">
+                        <h2>Net Asset Value</h2>
+                        <h5>${{summary.account.NAV}}</h5>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-3">
+            <div class="card card-outline-success mb-3 text-center">
+                <div class="card-block h-20">
+                    <blockquote class="card-blockquote">
+                        <h2>Unrealized Profit/Loss</h2>
+                        <h5>${{summary.account.unrealizedPL}}</h5>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-3">
+            <div class="card card-outline-warning mb-3 text-center">
+                <div class="card-block h-20">
+                    <blockquote class="card-blockquote">
+                        <h2>Margin Available</h2>
+                        <h5>${{summary.account.marginAvailable}}</h5>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- list of account summary -->
+    <div class="row">
+        <div class="col-md-4">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Account Summary</th>
+                    <th>Amount (CAD)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Financing</td>
+                    <td>${{summary.account.financing}}</td>
+                </tr>
+                <tr>
+                    <td>Last Transaction ID</td>
+                    <td>{{summary.account.lastTransactionID}}</td>
+                </tr>
+                <tr>
+                    <td>Margin Persent</td>
+                    <td>{{summary.account.marginCallPercent*100}}%</td>
+                </tr>
+                <tr>
+                    <td>Margin Used</td>
+                    <td>${{summary.account.marginCallMarginUsed}}</td>
+                </tr>
+                <tr>
+                    <td>Withdraw Allowed Limit</td>
+                    <td>${{summary.account.withdrawalLimit}}</td>
+                </tr>
+                <tr>
+                    <td>Position Value</td>
+                    <td>${{summary.account.positionValue}}</td>
+                </tr>
+                <tr>
+                    <td>Profit/Loss</td>
+                    <td>${{summary.account.pl}}</td>
+                </tr>
+                <tr>
+                    <td>Open Position Count</td>
+                    <td>{{summary.account.openPositionCount}}</td>
+                </tr>
+                <tr>
+                    <td>Open Trade Count</td>
+                    <td>{{summary.account.openTradeCount}}</td>
+                </tr>
+                <tr>
+                    <td>Open Order Count</td>
+                    <td>{{summary.account.pendingOrderCount}}</td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <!-- table at the right -->
+        <div class="col-md-8">
+            <h2>Current Trades</h2>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">Create Time</th>
+                    <th scope="col">Instrument</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Unit</th>
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr ng-repeat="trade in trades | orderBy : 'id' ">
+                    <th scope="row">{{trade.id}}</th>
+                    <td>{{trade.openTime | date }}</td>
+                    <td>{{trade.instrument}}</td>
+                    <td>{{trade.price}}</td>
+                    <td>{{trade.currentUnits}}</td>
+                    <td><span ng-class="trade.currentUnits > 0 ? 'badge badge-success' : 'badge badge-danger'">{{trade.currentUnits > 0 ? 'buy': 'sell'}}</span>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</div>

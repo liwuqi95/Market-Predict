@@ -1,0 +1,58 @@
+<div ng-controller="commentController as comment">
+
+    <h2 class="text-center">Trading Community</h2>
+
+    <div class="row">
+
+        <div class="col-md-3 col-sm-4 ">
+            <div class="instrument-scroll">
+                <div ng-repeat="instrument in instrumentList |  orderBy:'toString()' ">
+                    <br>
+                    <button ng-click="changeInstrument(instrument)" href="#" type="button"
+                            class="btn {{instrument == current_instrument ? 'btn-primary':'btn-secondary'}} btn-block">
+                        {{instrument}}
+                    </button>
+                </div>
+                <br>
+                <a class="btn btn-outline-success btn-block" href="#!instruments"><strong>+</strong> Instruments</a>
+            </div>
+        </div>
+
+        <div class="col-md-9 col-sm-8">
+
+            <br>
+            <h6>There are {{commentsList.length}} comments</h6>
+
+            <div class="comment-scroll">
+                <div ng-repeat="comment in commentsList track by $index">
+                    <div class="comment-wrap">
+                        <div class="photo">
+                            <div class="avatar"
+                                 style="background-image: url('https://s3.amazonaws.com/uifaces/faces/twitter/jsa/128.jpg')"></div>
+                        </div>
+                        <div class="comment-block">
+                            <p class="comment-text">{{comment}}</p>
+                            <div class="bottom-comment">
+                                <div class="comment-date">Aug 24, 2014 @ 2:35 PM</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="widget-area no-padding blank">
+                <div class="status-upload">
+                    <form ng-submit="addComment()">
+                        <textarea placeholder="Share your thought about this instrument : )" ng-model="message.comment"
+                                  required></textarea>
+                        <button class="btn btn-success green"><i class="fa fa-share"></i> Share</button>
+                    </form>
+                </div>
+            </div>
+
+
+        </div>
+
+
+    </div>
+</div>

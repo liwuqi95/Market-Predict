@@ -1,0 +1,49 @@
+<div ng-controller="instrumentController as instrument">
+    <br>
+
+    <h2 class="text-center">Manage Your Instruments </h2>
+    <br>
+    <div class="row">
+
+
+        <div class="col-md-4 ">
+            <h6 class="text-center">Favorite Instruments</h6>
+
+            <input type="text" class="form-control" ng-model="searchUserInstrument" placeholder="search in...">
+            <br>
+            <div class="instrument-scroll">
+                <div ng-repeat="instrument in userInstrumentList | orderBy:'toString()' |filter:searchUserInstrument">
+
+                    <button ng-click="removeInstrument(instrument)" href="#" type="button"
+                            class="btn btn-outline-success btn-block">
+                        {{instrument}}
+                    </button>       <br>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+
+        <div class="col-md-4 ">
+            <h6 class="text-center">Other Instruments</h6>
+
+            <input type="text" class="form-control" ng-model="searchOtherInstrument" placeholder="search in...">
+            <br>
+            <div class="instrument-scroll">
+
+                <div ng-repeat="instrument in leftInstrumentList | orderBy: 'name' | filter:{name:searchOtherInstrument}">
+
+
+                    <button ng-click="addInstrument(instrument.name)" href="#" type="button"
+                            class="btn btn-outline-primary btn-block">
+                        {{instrument.name}}
+                    </button>
+                    <br>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>

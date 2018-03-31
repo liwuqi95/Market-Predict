@@ -1,0 +1,49 @@
+<div ng-controller="MarketController as market">
+    <br>
+
+    <div class="alert {{messageType}}" role="alert" ng-show="message != null">
+        {{message}}
+    </div>
+    <br>
+    <div class="row">
+
+        <div class="col-md-3 col-sm-4 ">
+            <div class="instrument-scroll ">
+                <div ng-repeat="instrument in instrumentList |  orderBy:'toString()' ">
+                    <br>
+                    <button ng-click="changeInstrument(instrument)" href="#" type="button"
+                            class="btn {{instrument == current_instrument ? 'btn-primary':'btn-secondary'}} btn-block">
+                        {{instrument}}
+                    </button>
+                </div>
+                <br>
+                <a class="btn btn-outline-success btn-block" href="#!instruments"><strong>+</strong> Instruments</a>
+            </div>
+        </div>
+
+        <div class="col-md-9 col-sm-8">
+            <h2 class="text-center">Current Market Status</h2>
+            <br>
+            <div class="row">
+
+                <canvas width='1500' height='815' id="line" class="chart chart-line" chart-data="data"
+                        chart-options="options" chart-labels="labels"></canvas>
+            </div>
+            <br><br>
+            <div class="row">
+                <div class="col-md-4">
+                    <button class="btn btn-block btn-danger " ng-click="action('sell')">SELL</button>
+                </div>
+                <div class="col-md-4 text-center">
+                    <input class="form-control" type="number" value="42" ng-model="quant">
+                    <small class="form-text text-muted">
+                        Please enter the quantity of your order
+                    </small>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-block btn-success" ng-click="action('buy')">BUY</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
