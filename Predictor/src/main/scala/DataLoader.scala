@@ -14,8 +14,8 @@ class DataLoader {
       .option("mode", "DROPMALFORMED")
       .load(fileName)
 
-    val result = df.withColumn("time",to_timestamp($"Local time", "dd.MM.yyyy HH:mm:ss.SSS"))
-      .drop($"Local time")
+    val result = df.withColumn("time",to_timestamp($"Gmt time", "dd.MM.yyyy HH:mm:ss.SSS"))
+      .drop($"Gmt time")
     result
   }
 

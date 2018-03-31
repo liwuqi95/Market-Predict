@@ -101,15 +101,13 @@ class indicator(val dataframe: DataFrame) {
   case class Row(Future_price: Float, SMA: Float, EMA: Float, MACD: Float, RSI: Float, STOCH: Float, CCI: Float, AROON: Float)
 
 
-  def compute: Unit = {
+  def compute(): DataFrame = {
 
     val t1 = System.currentTimeMillis
 
     val spark = SparkSession.builder().appName("Predictor").getOrCreate()
 
     import spark.implicits._
-
-    val win = Window.orderBy("time")
 
     val UDF_sma = udf(sma_indicator.computeSMAResult)
 
@@ -138,7 +136,7 @@ class indicator(val dataframe: DataFrame) {
       .withColumn("STOCH_RSI", UDF_stochrsi($"RSI")).cache()
       .withColumn("CCI", UDF_cci($"price")).cache()
       .withColumn("AROON", UDF_aroon($"price")).cache()
-      .withColumn("label", lead("price", 1, 3).over(win))
+
 
       .filter($"SMA" =!= 3)
       .filter($"EMA" =!= 3)
@@ -148,23 +146,19 @@ class indicator(val dataframe: DataFrame) {
       .filter($"STOCH_RSI" =!= 3)
       .filter($"CCI" =!= 3)
       .filter($"AROON" =!= 3)
-      .filter($"label" =!= 3)
+     // .filter($"label" =!= 3)
 
       .drop("High")
       .drop("Open")
       .drop("Low")
       .drop("Volume")
-      .drop("time")
+      //.drop("time")
       .drop("Close")
-
+   //   DF.show()
 
     val t2 = System.currentTimeMillis
 
-    println("Computing indicators uses " + (t2 - t1) + " millisecond")
-
-  }
-
-  def getDF(): DataFrame ={
+//    println("Computing indicators uses " + (t2 - t1) + " millisecond")
     DF
   }
 }

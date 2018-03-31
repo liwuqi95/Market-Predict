@@ -1,49 +1,90 @@
 /* SimpleApp.scala */
 
 import indicators._
-
-import org.apache.spark.ml.linalg.{Vector, Vectors}
 import org.apache.spark.sql.{Row, SparkSession}
 import org.apache.spark.{SparkConf, SparkContext}
-import org.apache.spark.ml.classification.LogisticRegression
 
-object SimpleApp {
+class SimpleApp {
 
+  /** Setup Spark environment */
+  // Set up Spark running environment
+  val conf = new SparkConf().setAppName("Predictor").setMaster("local[4]")
+  val sc = new SparkContext(conf)
+  sc.setLogLevel("ERROR")
 
-  def main(args: Array[String]) {
+  val spark = SparkSession.builder().appName("Predictor").getOrCreate()
 
+  import spark.implicits._
 
-    // Set up Spark running environment
-    val conf = new SparkConf().setAppName("Predictor").setMaster("local[4]")
-    val sc = new SparkContext(conf)
-    sc.setLogLevel("ERROR")
+  var goldModels :List[Double] = List()
+  var oilModels :List[Double] = List()
+  var currencyModels :List[Double] = List()
 
+  def init(instrument:String) {
 
+    /** Initialize DataLoader */
+    val Loader: DataLoader = new DataLoader()
 
+    /** Initilize DataParser */
+    val Parser: DataParser = new DataParser()
 
-    // Set spark Session
-    val spark = SparkSession.builder().appName("Predictor").getOrCreate()
-
-
-    // Initialize data loader
-    val goldLoader: DataLoader = new DataLoader()
-
-    // Initialize indicators
-    val gold_indicators = new indicator(goldLoader.getDF("XAUUSD_Candlestick_1_D_BID_01.01.2017-31.12.2017.csv"))
-
-    gold_indicators.compute
-
-    // Initialize learner
+    /** Initilize DataEvaluater */
+    val Evaluater: DataEvaluater = new DataEvaluater()
 
 
-    val gold_learner = new Learner()
+    val time_periods = Array(1, 3, 7, 15, 30, 60, 90)
 
-    gold_learner.Initialize(gold_indicators.getDF())
 
-    gold_learner.train()
-    gold_learner.analyze()
+    /** Load Indicators */
+    val gold_indicators = new indicator(Loader.getDF( instrument + ".csv")).compute()
 
-    
+    for (time_period <- time_periods) {
+
+      println("Predicting " + instrument + " price with time period " + time_period + " days")
+
+      /** Parse Indicators */
+      val gold_DF = Parser.parse(gold_indicators, time_period)
+
+      // split train and valid
+      val gold_train_DF = gold_DF.filter($"time" < "2017-01-01 00:00:00")
+
+      val gold_valid_DF = gold_DF.filter($"time" >= "2017-01-01 00:00:00")
+
+
+      /** Initialize  learner */
+      val gold_learner = new Learner()
+
+      /** train with linear regression */
+
+      val mlLin_result = gold_learner.predict_LinReg(gold_train_DF, gold_valid_DF)
+
+      Evaluater.evaluatePrice(mlLin_result)
+
+      Evaluater.evaluateDirection(mlLin_result)
+
+      val prediction:Double = mlLin_result.orderBy($"time".desc).first().getDouble(5)
+
+
+     if(instrument == "gold")
+      goldModels = goldModels :+ prediction
+     else if (instrument == "oil")
+       oilModels = oilModels :+ prediction
+     else
+       currencyModels = currencyModels :+ prediction
+
+    }
+  }
+
+
+  def predict_Gold(data:Array[Double], period: Int): Double ={
+    goldModels(period)
+  }
+
+
+
+
+
+  def stop() {
     spark.stop()
   }
 }
