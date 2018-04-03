@@ -127,8 +127,6 @@ println("Ddd")
 
 
 
-
-//   predictResult.select($"time",$"features",$"prediction").show()
 //
 //
 //    val win = Window.orderBy("time")
@@ -144,7 +142,7 @@ println("Ddd")
 //    val df2 = predictResult.select($"time", ($"prediction" - 1000).alias("data")).withColumn("type", lit("Prediction"))
 //
 //
-//    predictResult = df1.union(df2)
+//    predictResult = df1.union(df2)c
 //
 //    Vegas("Sample Multi Series Line Chart", width=400.0, height=300.0)
 //      .withDataFrame(predictResult)
@@ -161,33 +159,7 @@ println("Ddd")
 //      .show
 
 
-//
-//  def evaluateAccuracy(data:DataFrame): Unit ={
-//    val spark = SparkSession.builder().appName("Predictor").getOrCreate()
-//
-//    import spark.implicits._
-//
-//    val win = Window.orderBy("time")
-//
-//    val mda = (a1:Float, a2:Float, f1:Float, f2:Float) =>  {
-//      if(a2 == 3 || f2 ==3){
-//        3
-//      }
-//      else if (sign(a1,a2) == sign(f1, f2)){
-//        1
-//      }
-//      else{
-//        0
-//      }
-//    }
-//
-//    val UDF_mda = udf(mda)
-//
-//    var data2 =  data.withColumn("accuracy", UDF_mda($"prediction", $"price", $"actual", $"price"))
-//       .filter($"accuracy" =!= 3)
-//      data2.show()
-//       data2.select(avg($"accuracy").alias("Mean of accuracy result")).show()
-//  }
+
 //
 //  def sign(data1:Float,data2:Float):Int ={
 //  if(data1 - data2 > 0)

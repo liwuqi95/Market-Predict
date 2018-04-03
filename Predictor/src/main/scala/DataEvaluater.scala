@@ -1,6 +1,11 @@
 import org.apache.spark.ml.evaluation.RegressionEvaluator
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.ml.linalg.{DenseVector, SparseVector, Vectors}
+import vegas._
+import vegas.render.WindowRenderer._
+import vegas.sparkExt._
+import org.apache.spark.sql.functions._
+
 
 class DataEvaluater {
 
@@ -92,12 +97,27 @@ class DataEvaluater {
   }
 
 
+  def plotResult(dataFrame: DataFrame, period: Int): Unit ={
+
+        val df1 = dataFrame.select($"time", $"label".alias("data")).withColumn("type", lit("Actual value"))
+
+        val df2 = dataFrame.select($"time", $"prediction".alias("data")).withColumn("type", lit("Prediction"))
+
+        val data = df1.union(df2)
 
 
+        Vegas("Sample Multi Series Line Chart", width=400.0, height=300.0)
+          .withDataFrame(data)
+          .mark(Line)
+          .encodeX("time", Temp)
+          .encodeY("data", Quantitative)
+          .encodeColor(
+            field="type",
+            dataType=Nominal,
+            legend=Legend(orient="left", title="Prices"))
 
-
-
-
-
+          .encodeDetailFields(Field(field="type", dataType=Nominal))
+          .show
+  }
 
 }

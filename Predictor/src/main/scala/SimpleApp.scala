@@ -33,6 +33,7 @@ class SimpleApp {
 
 
     val time_periods = Array(1, 3, 7, 15, 30, 60, 90)
+//    val time_periods = Array(90)
 
 
     /** Load Indicators */
@@ -43,7 +44,7 @@ class SimpleApp {
       println("Predicting " + instrument + " price with time period " + time_period + " days")
 
       /** Parse Indicators */
-      val gold_DF = Parser.parse(gold_indicators, time_period)
+      val gold_DF = Parser.parse(gold_indicators, time_period * 24)
 
       // split train and valid
       val gold_train_DF = gold_DF.filter($"time" < "2017-01-01 00:00:00")
@@ -61,6 +62,8 @@ class SimpleApp {
       Evaluater.evaluatePrice(mlLin_result)
 
       Evaluater.evaluateDirection(mlLin_result)
+
+//      Evaluater.plotResult(mlLin_result,time_period)
 
       val prediction:Double = mlLin_result.orderBy($"time".desc).first().getDouble(5)
 

@@ -42,7 +42,7 @@ class RootHandler extends HttpHandler {
     var prediction: Double = 0.0
 
     if (instrument.toString == "USD_CAD") {
-      prediction = myapp.currencyModels(period.toInt)
+      prediction = myapp.currencyModels(period.toInt)/1000
     }
     else if (instrument.toString == "WTICO_USD") {
       prediction = myapp.oilModels(period.toInt)

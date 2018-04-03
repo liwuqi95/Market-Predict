@@ -14,8 +14,13 @@ class DataLoader {
       .option("mode", "DROPMALFORMED")
       .load(fileName)
 
-    val result = df.withColumn("time",to_timestamp($"Gmt time", "dd.MM.yyyy HH:mm:ss.SSS"))
+    var result = df.withColumn("time",to_timestamp($"Local time", "dd.MM.yyyy HH:mm:ss.SSS"))
       .drop($"Gmt time")
+
+    if(fileName == "usdcad.csv"){
+      result = result.withColumn("price", $"Close" * 1000).drop("Close").withColumnRenamed("price","CLose")
+    }
+
     result
   }
 
